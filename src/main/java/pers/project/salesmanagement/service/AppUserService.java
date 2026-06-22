@@ -1,5 +1,6 @@
 package pers.project.salesmanagement.service;
 
+import pers.project.salesmanagement.dto.request.AssignRolesRequest;
 import pers.project.salesmanagement.dto.request.CreateAppUserRequest;
 import pers.project.salesmanagement.dto.request.UpdateAppUserRequest;
 import pers.project.salesmanagement.dto.response.AppUserResponse;
@@ -13,4 +14,11 @@ public interface AppUserService {
     List<AppUserResponse> getAllUsers();
 
     AppUserResponse updateUser(UpdateAppUserRequest request);
+
+    AppUserResponse activateUser(UUID id);
+
+    AppUserResponse deactivateUser(UUID id);
+
+    AppUserResponse assignRoles(AssignRolesRequest request);
+
 }

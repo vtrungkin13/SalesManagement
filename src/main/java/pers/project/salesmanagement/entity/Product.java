@@ -26,8 +26,9 @@ public class Product {
 
     private String description;
 
-    @Column(columnDefinition = "int default 0")
-    private ProductStatus Status = ProductStatus.ACTIVE;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(255) default 'ACTIVE'")
+    private ProductStatus status = ProductStatus.ACTIVE;
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private ProductImage image;

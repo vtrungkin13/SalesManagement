@@ -38,7 +38,7 @@ public class SalesOrder {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "salesOrder")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "salesOrder", cascade = CascadeType.ALL)
     private List<SalesOrderItem>  salesOrderItems;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "salesOrder")

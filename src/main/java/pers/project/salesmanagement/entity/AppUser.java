@@ -3,6 +3,7 @@ package pers.project.salesmanagement.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,7 +31,8 @@ public class AppUser {
     private String email;
 
     @NotNull
-    @Column(nullable = false, columnDefinition = "varchar(100) check (len(password) >= 8)")
+    @Size(min = 8)
+    @Column(nullable = false, columnDefinition = "varchar(100) check (len([password]) >= 8)")
     private String password;
 
     @NotNull

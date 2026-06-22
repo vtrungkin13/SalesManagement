@@ -4,12 +4,14 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pers.project.salesmanagement.dto.request.AssignRolesRequest;
 import pers.project.salesmanagement.dto.request.CreateAppUserRequest;
 import pers.project.salesmanagement.dto.request.UpdateAppUserRequest;
 import pers.project.salesmanagement.dto.response.AppUserResponse;
 import pers.project.salesmanagement.entity.Role;
 import pers.project.salesmanagement.entity.Tenant;
 import pers.project.salesmanagement.entity.AppUser;
+import pers.project.salesmanagement.entity.status.UserStatus;
 import pers.project.salesmanagement.mapper.AppUserMapper;
 import pers.project.salesmanagement.repository.RoleRepository;
 import pers.project.salesmanagement.repository.TenantRepository;
@@ -70,6 +72,35 @@ public class AppUserServiceImpl implements AppUserService {
         appUser.setEmail(request.email());
         appUser.setName(request.name());
         appUser.setPhone(request.phone());
+
+        return appUserMapper.toResponse(appUser);
+    }
+
+    @Override
+    public AppUserResponse activateUser(UUID id) {
+        AppUser appUser = appUserRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        appUser.setStatus(UserStatus.ACTIVE);
+
+        return appUserMapper.toResponse(appUser);
+    }
+
+    @Override
+    public AppUserResponse deactivateUser(UUID id) {
+        AppUser appUser = appUserRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        appUser.setStatus(UserStatus.INACTIVE);
+
+        return appUserMapper.toResponse(appUser);
+    }
+
+    @Override
+    public AppUserResponse assignRoles(AssignRolesRequest request) {
+        AppUser appUser = appUserRepository.findById(request.id()).orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Role> userRoles = new ArrayList<>();
+        request.rolesId().forEach(roleId -> userRoles.add(roleRepository.getReferenceById(roleId)));
+        appUser.setRoles(userRoles);
 
         return appUserMapper.toResponse(appUser);
     }
