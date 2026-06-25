@@ -1,7 +1,6 @@
 package pers.project.salesmanagement.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import pers.project.salesmanagement.dto.response.RoleResponse;
 import pers.project.salesmanagement.entity.Role;
 
