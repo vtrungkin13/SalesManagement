@@ -10,6 +10,7 @@ import pers.project.salesmanagement.dto.request.UpdateSalesOrderRequest;
 import pers.project.salesmanagement.dto.response.SalesOrderItemResponse;
 import pers.project.salesmanagement.dto.response.SalesOrderResponse;
 import pers.project.salesmanagement.entity.*;
+import pers.project.salesmanagement.entity.status.TransactionType;
 import pers.project.salesmanagement.mapper.SalesOrderItemMapper;
 import pers.project.salesmanagement.mapper.SalesOrderMapper;
 import pers.project.salesmanagement.repository.*;
@@ -31,6 +32,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     private final TenantRepository tenantRepository;
     private final InventoryRepository inventoryRepository;
     private final SalesOrderItemRepository salesOrderItemRepository;
+    private final InventoryTransactionRepository inventoryTransactionRepository;
     private final SalesOrderMapper salesOrderMapper;
     private final SalesOrderItemMapper salesOrderItemMapper;
 
@@ -49,7 +51,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             throw new RuntimeException("Customer does not belong to the current tenant");
         }
 
+        UUID salesOrderId = UUID.randomUUID();
         SalesOrder salesOrder = new SalesOrder();
+        salesOrder.setId(salesOrderId);
         salesOrder.setCustomer(customer);
         salesOrder.setTenant(tenant);
         salesOrder.setOrderNumber("SO-" + System.currentTimeMillis());
@@ -83,6 +87,14 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                     inventory.setQuantity(currentQty - deduct);
                     remainingToDeduct -= deduct;
                     inventoryRepository.save(inventory);
+
+                    // Create Inventory Transaction
+                    InventoryTransaction tx = new InventoryTransaction();
+                    tx.setTransactionType(TransactionType.OUT);
+                    tx.setQuantity(deduct);
+                    tx.setInventory(inventory);
+                    tx.setReferenceId(salesOrderId);
+                    inventoryTransactionRepository.save(tx);
                 }
             }
 
@@ -197,6 +209,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             }
         }
 
+        // Delete old transactions
+        inventoryTransactionRepository.deleteByReferenceId(id);
+
         // Delete old items
         salesOrderItemRepository.deleteAll(order.getSalesOrderItems());
         order.getSalesOrderItems().clear();
@@ -237,6 +252,14 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                     inventory.setQuantity(currentQty - deduct);
                     remainingToDeduct -= deduct;
                     inventoryRepository.save(inventory);
+
+                    // Create Inventory Transaction
+                    InventoryTransaction tx = new InventoryTransaction();
+                    tx.setTransactionType(TransactionType.OUT);
+                    tx.setQuantity(deduct);
+                    tx.setInventory(inventory);
+                    tx.setReferenceId(id);
+                    inventoryTransactionRepository.save(tx);
                 }
             }
 
@@ -296,6 +319,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 inventoryRepository.save(firstInv);
             }
         }
+
+        // Delete related transactions
+        inventoryTransactionRepository.deleteByReferenceId(id);
 
         salesOrderRepository.delete(order);
     }

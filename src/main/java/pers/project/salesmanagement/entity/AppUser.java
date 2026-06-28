@@ -43,7 +43,8 @@ public class AppUser {
     @Column(nullable = false, columnDefinition = "char(10)")
     private String phone;
 
-    @Column(columnDefinition = "int default 0")
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(255) default 'ACTIVE'")
     private UserStatus status = UserStatus.ACTIVE;
 
     @CreationTimestamp
@@ -55,10 +56,6 @@ public class AppUser {
     private Tenant tenant;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 }

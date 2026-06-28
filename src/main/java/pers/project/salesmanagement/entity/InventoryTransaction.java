@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import pers.project.salesmanagement.entity.status.TransactionType;
+
 @Entity
 @Table(name = "inventory_transaction")
 @Data
@@ -18,12 +20,16 @@ public class InventoryTransaction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "transaction_type")
-    private String transactionType;
+    private TransactionType transactionType;
 
     private int quantity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "inventory_id")
     private Inventory inventory;
+
+    @Column(name = "reference_id")
+    private UUID referenceId;
 }

@@ -2,11 +2,14 @@ pers\project\salesmanagement\dto\response\SalesOrderResponse.class
 pers\project\salesmanagement\entity\WareHouse.class
 pers\project\salesmanagement\dto\request\CreateAppUserRequest.class
 pers\project\salesmanagement\entity\ProductImage.class
+pers\project\salesmanagement\repository\SupplierRepository.class
 pers\project\salesmanagement\entity\Notification.class
 pers\project\salesmanagement\dto\response\RegisterResponse.class
 pers\project\salesmanagement\security\AppUserDetailsService.class
+pers\project\salesmanagement\dto\request\CreatePurchaseOrderItemRequest.class
 pers\project\salesmanagement\entity\PurchaseOrder.class
 pers\project\salesmanagement\mapper\SalesOrderItemMapperImpl.class
+pers\project\salesmanagement\controller\PurchaseOrderController.class
 pers\project\salesmanagement\entity\ReturnOrder.class
 pers\project\salesmanagement\exception\GlobalExceptionHandler.class
 pers\project\salesmanagement\entity\status\PurchaseStatus.class
@@ -15,6 +18,7 @@ pers\project\salesmanagement\repository\AppUserRepository.class
 pers\project\salesmanagement\repository\ProductRepository.class
 pers\project\salesmanagement\dto\response\RoleResponse.class
 pers\project\salesmanagement\dto\request\CreateProductRequest.class
+pers\project\salesmanagement\service\impl\PurchaseOrderServiceImpl.class
 pers\project\salesmanagement\entity\Product.class
 pers\project\salesmanagement\dto\response\TenantResponse.class
 pers\project\salesmanagement\service\impl\SalesOrderServiceImpl.class
@@ -23,6 +27,7 @@ pers\project\salesmanagement\repository\SalesOrderRepository.class
 pers\project\salesmanagement\entity\ReturnOrderItem.class
 pers\project\salesmanagement\repository\InventoryTransactionRepository.class
 pers\project\salesmanagement\repository\InventoryRepository.class
+pers\project\salesmanagement\dto\request\CreateGoodsReceiptItemRequest.class
 pers\project\salesmanagement\dto\request\UpdateSalesOrderRequest.class
 pers\project\salesmanagement\repository\ProductImageRepository.class
 pers\project\salesmanagement\dto\response\AuthResponse.class
@@ -33,6 +38,7 @@ pers\project\salesmanagement\entity\PurchaseOrderItem.class
 pers\project\salesmanagement\dto\request\RegisterRequest.class
 pers\project\salesmanagement\repository\CategoryRepository.class
 pers\project\salesmanagement\config\CorsConfig$1.class
+pers\project\salesmanagement\dto\response\GoodsReceiptItemResponse.class
 pers\project\salesmanagement\exception\EmailAlreadyExistsException.class
 pers\project\salesmanagement\controller\ProductController.class
 pers\project\salesmanagement\controller\SalesOrderController.class
@@ -40,9 +46,11 @@ pers\project\salesmanagement\entity\ProductVariant.class
 pers\project\salesmanagement\entity\Category.class
 pers\project\salesmanagement\dto\request\CreateSalesOrderItemRequest.class
 pers\project\salesmanagement\controller\AppUserController.class
+pers\project\salesmanagement\repository\GoodsReceiptItemRepository.class
 pers\project\salesmanagement\service\impl\TenantServiceImpl.class
 pers\project\salesmanagement\security\LoginRateLimiter.class
 pers\project\salesmanagement\service\AuthService.class
+pers\project\salesmanagement\service\impl\GoodsReceiptServiceImpl.class
 pers\project\salesmanagement\entity\Role.class
 pers\project\salesmanagement\dto\request\CreateCategoryRequest.class
 pers\project\salesmanagement\mapper\CategoryMapper.class
@@ -51,6 +59,8 @@ pers\project\salesmanagement\mapper\CategoryMapperImpl.class
 pers\project\salesmanagement\dto\response\SalesOrderItemResponse.class
 pers\project\salesmanagement\entity\Tenant.class
 pers\project\salesmanagement\entity\status\UserStatus.class
+pers\project\salesmanagement\repository\GoodsReceiptRepository.class
+pers\project\salesmanagement\dto\response\PurchaseOrderItemResponse.class
 pers\project\salesmanagement\service\impl\RefreshTokenServiceImpl.class
 pers\project\salesmanagement\entity\status\ProductStatus.class
 pers\project\salesmanagement\repository\CustomerRepository.class
@@ -60,6 +70,7 @@ pers\project\salesmanagement\dto\request\AssignRolesRequest.class
 pers\project\salesmanagement\security\CustomAccessDeniedHandler.class
 pers\project\salesmanagement\repository\RefreshTokenRepository.class
 pers\project\salesmanagement\service\impl\ProductServiceImpl.class
+pers\project\salesmanagement\service\PurchaseOrderService.class
 pers\project\salesmanagement\dto\request\LoginRequest.class
 pers\project\salesmanagement\dto\request\CreateTenantRequest.class
 pers\project\salesmanagement\mapper\RoleMapper.class
@@ -73,16 +84,22 @@ pers\project\salesmanagement\mapper\ProductMapper.class
 pers\project\salesmanagement\repository\RoleRepository.class
 pers\project\salesmanagement\service\impl\CategoryServiceImpl.class
 pers\project\salesmanagement\service\ProductService.class
+pers\project\salesmanagement\dto\request\CreateGoodsReceiptRequest.class
 pers\project\salesmanagement\config\CorsConfig.class
 pers\project\salesmanagement\exception\InvalidRefreshTokenException.class
+pers\project\salesmanagement\service\GoodsReceiptService.class
 pers\project\salesmanagement\service\impl\AuthServiceImpl.class
+pers\project\salesmanagement\dto\request\CreatePurchaseOrderRequest.class
 pers\project\salesmanagement\dto\response\ProductDetailResponse.class
 pers\project\salesmanagement\repository\SalesOrderItemRepository.class
 pers\project\salesmanagement\service\RefreshTokenService.class
+pers\project\salesmanagement\repository\PurchaseOrderRepository.class
 pers\project\salesmanagement\controller\TenantController.class
 pers\project\salesmanagement\dto\request\RefreshTokenRequest.class
+pers\project\salesmanagement\dto\response\GoodsReceiptResponse.class
 pers\project\salesmanagement\mapper\SalesOrderMapperImpl.class
 pers\project\salesmanagement\mapper\AppUserMapper.class
+pers\project\salesmanagement\dto\response\PurchaseOrderResponse.class
 pers\project\salesmanagement\entity\GoodsReceipt.class
 pers\project\salesmanagement\security\JwtService.class
 pers\project\salesmanagement\dto\response\ProductResponse.class
@@ -101,6 +118,7 @@ pers\project\salesmanagement\entity\Customer.class
 pers\project\salesmanagement\controller\AuthController.class
 pers\project\salesmanagement\entity\InventoryTransaction.class
 pers\project\salesmanagement\entity\Supplier.class
+pers\project\salesmanagement\controller\GoodsReceiptController.class
 pers\project\salesmanagement\service\impl\RoleServiceImpl.class
 pers\project\salesmanagement\entity\status\TenantStatus.class
 pers\project\salesmanagement\mapper\AppUserMapperImpl.class
@@ -113,5 +131,7 @@ pers\project\salesmanagement\mapper\SalesOrderMapper.class
 pers\project\salesmanagement\entity\RefreshToken.class
 pers\project\salesmanagement\service\AppUserService.class
 pers\project\salesmanagement\dto\request\CreateSalesOrderRequest.class
+pers\project\salesmanagement\entity\status\TransactionType.class
 pers\project\salesmanagement\service\RoleService.class
+pers\project\salesmanagement\repository\PurchaseOrderItemRepository.class
 pers\project\salesmanagement\repository\WarehouseRepository.class

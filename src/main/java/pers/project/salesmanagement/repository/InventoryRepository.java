@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import pers.project.salesmanagement.entity.Inventory;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -19,4 +20,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, UUID> {
     int sumQuantityByVariantId(@Param("variantId") UUID variantId);
 
     List<Inventory> findByVariantId(UUID variantId);
+
+    Optional<Inventory> findByWarehouseIdAndVariantId(UUID warehouseId, UUID variantId);
 }

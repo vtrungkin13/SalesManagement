@@ -31,7 +31,8 @@ public class Tenant {
     @Column(nullable = false)
     private String name;
 
-    @Column(columnDefinition = "int default 0")
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(255) default 'ACTIVE'")
     private TenantStatus status = TenantStatus.ACTIVE;
 
     @CreationTimestamp

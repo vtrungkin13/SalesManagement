@@ -23,4 +23,8 @@ public class GoodsReceiptItem {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "goods_receipt_id")
     private GoodsReceipt goodsReceipt;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "variant_id")
+    private ProductVariant variant;
 }

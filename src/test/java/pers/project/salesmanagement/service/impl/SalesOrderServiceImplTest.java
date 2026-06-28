@@ -46,6 +46,8 @@ class SalesOrderServiceImplTest {
     @Mock
     private SalesOrderItemRepository salesOrderItemRepository;
     @Mock
+    private InventoryTransactionRepository inventoryTransactionRepository;
+    @Mock
     private SalesOrderMapper salesOrderMapper;
     @Mock
     private SalesOrderItemMapper salesOrderItemMapper;

@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "purchase_order")
+@Table(name = "purchase_order", indexes = {
+        @Index(name = "idx_po_tenant", columnList = "tenant_id")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +24,12 @@ public class PurchaseOrder {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(columnDefinition = "int default 0")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(255) default 'PENDING'")
     private PurchaseStatus status = PurchaseStatus.PENDING;
 
     private double amount;

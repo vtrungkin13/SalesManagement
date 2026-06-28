@@ -32,7 +32,8 @@ public class ProductVariant {
     @Column(name = "sell_price")
     private double sellPrice;
 
-    @Column(columnDefinition = "int default 0")
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(255) default 'ACTIVE'")
     private ProductStatus status = ProductStatus.ACTIVE;
 
     @ManyToOne(fetch = FetchType.EAGER)

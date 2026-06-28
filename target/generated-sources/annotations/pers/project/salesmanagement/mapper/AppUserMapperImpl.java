@@ -16,8 +16,8 @@ import pers.project.salesmanagement.entity.status.UserStatus;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-28T16:28:12+0700",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
+    date = "2026-06-28T17:04:48+0700",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
 )
 @Component
 public class AppUserMapperImpl implements AppUserMapper {
@@ -31,8 +31,8 @@ public class AppUserMapperImpl implements AppUserMapper {
         AppUser appUser = new AppUser();
 
         appUser.setEmail( request.email() );
-        appUser.setPassword( request.password() );
         appUser.setName( request.name() );
+        appUser.setPassword( request.password() );
         appUser.setPhone( request.phone() );
 
         return appUser;
@@ -89,8 +89,8 @@ public class AppUserMapperImpl implements AppUserMapper {
 
         AppUser appUser = new AppUser();
 
-        appUser.setId( request.id() );
         appUser.setEmail( request.email() );
+        appUser.setId( request.id() );
         appUser.setName( request.name() );
         appUser.setPhone( request.phone() );
 

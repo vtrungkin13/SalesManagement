@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface InventoryTransactionRepository extends JpaRepository<InventoryTransaction, UUID> {
+    void deleteByReferenceId(UUID referenceId);
 }
