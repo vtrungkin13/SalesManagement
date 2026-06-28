@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pers.project.salesmanagement.entity.Inventory;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -13,4 +14,9 @@ public interface InventoryRepository extends JpaRepository<Inventory, UUID> {
 
     @Query("SELECT COALESCE(SUM(i.quantity), 0) FROM Inventory i WHERE i.variant.product.id = :productId")
     int sumQuantityByProductId(@Param("productId") UUID productId);
+
+    @Query("SELECT COALESCE(SUM(i.quantity), 0) FROM Inventory i WHERE i.variant.id = :variantId")
+    int sumQuantityByVariantId(@Param("variantId") UUID variantId);
+
+    List<Inventory> findByVariantId(UUID variantId);
 }

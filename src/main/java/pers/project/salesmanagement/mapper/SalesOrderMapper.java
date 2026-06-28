@@ -9,5 +9,6 @@ import pers.project.salesmanagement.entity.SalesOrder;
 public interface SalesOrderMapper {
 
     @Mapping(source = "customer.name", target = "customerName")
+    @Mapping(target = "orderItems", ignore = true)
     SalesOrderResponse toResponse(SalesOrder salesOrder);
 }

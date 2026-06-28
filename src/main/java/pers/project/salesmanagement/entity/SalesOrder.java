@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "sales_order")
+@Table(name = "sales_order", indexes = {
+        @Index(name = "idx_so_tenant", columnList = "tenant_id")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,6 +39,10 @@ public class SalesOrder {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "salesOrder", cascade = CascadeType.ALL)
     private List<SalesOrderItem>  salesOrderItems;

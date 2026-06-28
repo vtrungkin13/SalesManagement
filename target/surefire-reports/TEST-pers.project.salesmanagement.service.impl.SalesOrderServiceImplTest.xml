@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="pers.project.salesmanagement.service.impl.ProductServiceImplTest" time="0.985" tests="5" errors="0" skipped="0" failures="0" flakes="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="pers.project.salesmanagement.service.impl.SalesOrderServiceImplTest" time="0.293" tests="3" errors="0" skipped="0" failures="0" flakes="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -66,9 +66,7 @@
     <property name="java.class.version" value="65.0"/>
     <property name="LOGGED_APPLICATION_NAME" value="[SalesManagement] "/>
   </properties>
-  <testcase name="testCreateProduct_Success" classname="pers.project.salesmanagement.service.impl.ProductServiceImplTest" time="0.944"/>
-  <testcase name="testGetProductDetail_Success" classname="pers.project.salesmanagement.service.impl.ProductServiceImplTest" time="0.009"/>
-  <testcase name="testGetProducts_Success" classname="pers.project.salesmanagement.service.impl.ProductServiceImplTest" time="0.011"/>
-  <testcase name="testCreateProduct_InvalidPrice" classname="pers.project.salesmanagement.service.impl.ProductServiceImplTest" time="0.009"/>
-  <testcase name="testCreateProduct_DuplicateSku" classname="pers.project.salesmanagement.service.impl.ProductServiceImplTest" time="0.006"/>
+  <testcase name="testCreateSalesOrder_OutOfStock" classname="pers.project.salesmanagement.service.impl.SalesOrderServiceImplTest" time="0.274"/>
+  <testcase name="testCreateSalesOrder_Success" classname="pers.project.salesmanagement.service.impl.SalesOrderServiceImplTest" time="0.007"/>
+  <testcase name="testDeleteSalesOrder_Success" classname="pers.project.salesmanagement.service.impl.SalesOrderServiceImplTest" time="0.007"/>
 </testsuite>

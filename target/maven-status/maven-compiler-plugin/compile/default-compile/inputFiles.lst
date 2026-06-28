@@ -18,6 +18,7 @@ D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\request\L
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\request\RefreshTokenRequest.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\request\RegisterRequest.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\request\UpdateAppUserRequest.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\request\UpdateSalesOrderRequest.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\AppUserResponse.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\AuthResponse.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\CategoryResponse.java

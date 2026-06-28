@@ -23,6 +23,7 @@ pers\project\salesmanagement\repository\SalesOrderRepository.class
 pers\project\salesmanagement\entity\ReturnOrderItem.class
 pers\project\salesmanagement\repository\InventoryTransactionRepository.class
 pers\project\salesmanagement\repository\InventoryRepository.class
+pers\project\salesmanagement\dto\request\UpdateSalesOrderRequest.class
 pers\project\salesmanagement\repository\ProductImageRepository.class
 pers\project\salesmanagement\dto\response\AuthResponse.class
 pers\project\salesmanagement\entity\Inventory.class
