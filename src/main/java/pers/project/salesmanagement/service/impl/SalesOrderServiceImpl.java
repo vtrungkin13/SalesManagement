@@ -11,7 +11,6 @@ import pers.project.salesmanagement.dto.response.SalesOrderItemResponse;
 import pers.project.salesmanagement.dto.response.SalesOrderResponse;
 import pers.project.salesmanagement.entity.*;
 import pers.project.salesmanagement.entity.status.TransactionType;
-import pers.project.salesmanagement.mapper.SalesOrderItemMapper;
 import pers.project.salesmanagement.mapper.SalesOrderMapper;
 import pers.project.salesmanagement.repository.*;
 import pers.project.salesmanagement.security.TenantSecurityUtil;
@@ -34,7 +33,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     private final SalesOrderItemRepository salesOrderItemRepository;
     private final InventoryTransactionRepository inventoryTransactionRepository;
     private final SalesOrderMapper salesOrderMapper;
-    private final SalesOrderItemMapper salesOrderItemMapper;
 
     @Override
     public SalesOrderResponse createSalesOrder(CreateSalesOrderRequest request) {
@@ -117,20 +115,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
         SalesOrder savedSalesOrder = salesOrderRepository.save(salesOrder);
 
-        SalesOrderResponse response = salesOrderMapper.toResponse(savedSalesOrder);
-        List<SalesOrderItemResponse> itemResponses = salesOrderItemMapper.toResponseList(savedSalesOrder.getSalesOrderItems());
-        
-        List<SalesOrderItemResponse> responseItems = new ArrayList<>(itemResponses);
-        return new SalesOrderResponse(
-                response.id(),
-                response.orderNumber(),
-                response.subtotal(),
-                response.discount(),
-                response.total(),
-                response.createdAt(),
-                response.customerName(),
-                responseItems
-        );
+        return salesOrderMapper.toResponse(savedSalesOrder);
     }
 
     @Override
@@ -141,20 +126,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         }
 
         return salesOrderRepository.findByTenantId(tenantId, pageable)
-                .map(order -> {
-                    SalesOrderResponse response = salesOrderMapper.toResponse(order);
-                    List<SalesOrderItemResponse> itemResponses = salesOrderItemMapper.toResponseList(order.getSalesOrderItems());
-                    return new SalesOrderResponse(
-                            response.id(),
-                            response.orderNumber(),
-                            response.subtotal(),
-                            response.discount(),
-                            response.total(),
-                            response.createdAt(),
-                            response.customerName(),
-                            new ArrayList<>(itemResponses)
-                    );
-                });
+                .map(salesOrderMapper::toResponse);
     }
 
     @Override
@@ -171,18 +143,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             throw new RuntimeException("Access denied to this order");
         }
 
-        SalesOrderResponse response = salesOrderMapper.toResponse(order);
-        List<SalesOrderItemResponse> itemResponses = salesOrderItemMapper.toResponseList(order.getSalesOrderItems());
-        return new SalesOrderResponse(
-                response.id(),
-                response.orderNumber(),
-                response.subtotal(),
-                response.discount(),
-                response.total(),
-                response.createdAt(),
-                response.customerName(),
-                new ArrayList<>(itemResponses)
-        );
+        return salesOrderMapper.toResponse(order);
     }
 
     @Override
@@ -282,18 +243,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
         SalesOrder updatedOrder = salesOrderRepository.save(order);
 
-        SalesOrderResponse response = salesOrderMapper.toResponse(updatedOrder);
-        List<SalesOrderItemResponse> itemResponses = salesOrderItemMapper.toResponseList(updatedOrder.getSalesOrderItems());
-        return new SalesOrderResponse(
-                response.id(),
-                response.orderNumber(),
-                response.subtotal(),
-                response.discount(),
-                response.total(),
-                response.createdAt(),
-                response.customerName(),
-                new ArrayList<>(itemResponses)
-        );
+        return salesOrderMapper.toResponse(updatedOrder);
     }
 
     @Override

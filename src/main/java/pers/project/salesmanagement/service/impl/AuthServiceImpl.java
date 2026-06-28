@@ -17,6 +17,7 @@ import pers.project.salesmanagement.entity.RefreshToken;
 import pers.project.salesmanagement.entity.Role;
 import pers.project.salesmanagement.exception.EmailAlreadyExistsException;
 import pers.project.salesmanagement.repository.AppUserRepository;
+import pers.project.salesmanagement.mapper.AppUserMapper;
 import pers.project.salesmanagement.repository.RoleRepository;
 import pers.project.salesmanagement.security.AppUserDetails;
 import pers.project.salesmanagement.security.JwtService;
@@ -38,6 +39,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
+    private final AppUserMapper appUserMapper;
 
     @Override
     public AuthResponse login(LoginRequest request) {
@@ -77,19 +79,7 @@ public class AuthServiceImpl implements AuthService {
 
         AppUser savedUser = appUserRepository.save(appUser);
 
-        // Build response — password hash is NEVER included
-        List<String> rolesName = savedUser.getRoles() == null
-                ? List.of()
-                : savedUser.getRoles().stream().map(Role::getName).toList();
-
-        return new RegisterResponse(
-                savedUser.getId(),
-                savedUser.getEmail(),
-                savedUser.getName(),
-                savedUser.getPhone(),
-                savedUser.getStatus(),
-                savedUser.getCreatedAt(),
-                rolesName);
+        return appUserMapper.toRegisterResponse(savedUser);
     }
 
     @Override

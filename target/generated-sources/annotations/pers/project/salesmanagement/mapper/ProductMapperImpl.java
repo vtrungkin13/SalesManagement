@@ -12,7 +12,7 @@ import pers.project.salesmanagement.entity.ProductImage;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-28T17:04:48+0700",
+    date = "2026-06-28T17:16:09+0700",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
 )
 @Component
@@ -27,8 +27,8 @@ public class ProductMapperImpl implements ProductMapper {
         Product product = new Product();
 
         product.setCode( request.code() );
-        product.setDescription( request.description() );
         product.setName( request.name() );
+        product.setDescription( request.description() );
 
         return product;
     }
@@ -59,8 +59,8 @@ public class ProductMapperImpl implements ProductMapper {
     }
 
     @Override
-    public ProductDetailResponse toDetailResponse(Product product) {
-        if ( product == null ) {
+    public ProductDetailResponse toDetailResponse(Product product, int inventory, double price, String sku) {
+        if ( product == null && sku == null ) {
             return null;
         }
 
@@ -70,19 +70,22 @@ public class ProductMapperImpl implements ProductMapper {
         String code = null;
         String name = null;
         String description = null;
-
-        imageUrl = productImageImageUrl( product );
-        categoryName = productCategoryName( product );
-        id = product.getId();
-        code = product.getCode();
-        name = product.getName();
-        description = product.getDescription();
-
+        if ( product != null ) {
+            imageUrl = productImageImageUrl( product );
+            categoryName = productCategoryName( product );
+            id = product.getId();
+            code = product.getCode();
+            name = product.getName();
+            description = product.getDescription();
+        }
         int currentInventory = 0;
-        double price = 0.0d;
-        String sku = null;
+        currentInventory = inventory;
+        double price1 = 0.0d;
+        price1 = price;
+        String sku1 = null;
+        sku1 = sku;
 
-        ProductDetailResponse productDetailResponse = new ProductDetailResponse( id, code, name, description, imageUrl, categoryName, currentInventory, price, sku );
+        ProductDetailResponse productDetailResponse = new ProductDetailResponse( id, code, name, description, imageUrl, categoryName, currentInventory, price1, sku1 );
 
         return productDetailResponse;
     }

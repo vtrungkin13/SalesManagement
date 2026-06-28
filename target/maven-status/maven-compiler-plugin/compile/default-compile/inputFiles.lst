@@ -72,7 +72,11 @@ D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\exception\Inv
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\exception\RateLimitExceededException.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\AppUserMapper.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\CategoryMapper.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\GoodsReceiptItemMapper.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\GoodsReceiptMapper.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\ProductMapper.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\PurchaseOrderItemMapper.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\PurchaseOrderMapper.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\RoleMapper.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\SalesOrderItemMapper.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\SalesOrderMapper.java

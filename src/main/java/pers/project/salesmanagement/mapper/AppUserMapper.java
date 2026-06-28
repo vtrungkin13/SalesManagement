@@ -10,9 +10,14 @@ import pers.project.salesmanagement.entity.AppUser;
 
 import java.util.List;
 
+import pers.project.salesmanagement.dto.response.RegisterResponse;
+
 @Mapper(componentModel = "spring")
 public interface AppUserMapper {
     AppUser toEntity(CreateAppUserRequest request);
+
+    @Mapping(source = "roles", target = "rolesName")
+    RegisterResponse toRegisterResponse(AppUser appUser);
 
     @Mapping(source = "tenant.name", target = "tenantName")
     @Mapping(source = "roles", target = "rolesName")

@@ -18,7 +18,6 @@ import pers.project.salesmanagement.dto.request.UpdateSalesOrderRequest;
 import pers.project.salesmanagement.dto.response.SalesOrderItemResponse;
 import pers.project.salesmanagement.dto.response.SalesOrderResponse;
 import pers.project.salesmanagement.entity.*;
-import pers.project.salesmanagement.mapper.SalesOrderItemMapper;
 import pers.project.salesmanagement.mapper.SalesOrderMapper;
 import pers.project.salesmanagement.repository.*;
 import pers.project.salesmanagement.security.TenantSecurityUtil;
@@ -49,8 +48,6 @@ class SalesOrderServiceImplTest {
     private InventoryTransactionRepository inventoryTransactionRepository;
     @Mock
     private SalesOrderMapper salesOrderMapper;
-    @Mock
-    private SalesOrderItemMapper salesOrderItemMapper;
 
     @InjectMocks
     private SalesOrderServiceImpl salesOrderService;
@@ -119,10 +116,6 @@ class SalesOrderServiceImplTest {
             SalesOrderResponse mockResponse = new SalesOrderResponse(mockOrder.getId(), "SO-12345", 300.0, 10.0, 290.0,
                     mockOrder.getCreatedAt(), "John Doe", new ArrayList<>());
             when(salesOrderMapper.toResponse(any(SalesOrder.class))).thenReturn(mockResponse);
-
-            List<SalesOrderItemResponse> itemResponses = Collections.singletonList(
-                    new SalesOrderItemResponse(UUID.randomUUID(), 2, 150.0, 10.0, variant.getId(), "SKU123"));
-            when(salesOrderItemMapper.toResponseList(anyList())).thenReturn(itemResponses);
 
             SalesOrderResponse response = salesOrderService.createSalesOrder(request);
 

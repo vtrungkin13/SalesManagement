@@ -171,8 +171,9 @@ class ProductServiceImplTest {
 
             when(productRepository.findById(any())).thenReturn(Optional.of(product));
             when(inventoryRepository.sumQuantityByProductId(any())).thenReturn(150);
-            when(productMapper.toDetailResponse(any())).thenReturn(new ProductDetailResponse(product.getId(), "PROD1",
-                    "Test Product", "Description", "http://image.url", "CategoryName", 0, 0, ""));
+            when(productMapper.toDetailResponse(any(), anyInt(), anyDouble(), anyString()))
+                    .thenReturn(new ProductDetailResponse(product.getId(), "PROD1",
+                            "Test Product", "Description", "http://image.url", "CategoryName", 150, 100.0, "SKU123"));
 
             ProductDetailResponse detail = productService.getProductDetail(product.getId());
 

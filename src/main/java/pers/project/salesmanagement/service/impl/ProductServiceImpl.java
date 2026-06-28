@@ -126,8 +126,6 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException("Access denied to this product");
         }
 
-        ProductDetailResponse response = productMapper.toDetailResponse(product);
-
         // Fetch inventories sum
         int currentInventory = inventoryRepository.sumQuantityByProductId(id);
 
@@ -140,15 +138,6 @@ public class ProductServiceImpl implements ProductService {
             sku = firstVariant.getSku();
         }
 
-        return new ProductDetailResponse(
-                response.id(),
-                response.code(),
-                response.name(),
-                response.description(),
-                response.imageUrl(),
-                response.categoryName(),
-                currentInventory,
-                price,
-                sku);
+        return productMapper.toDetailResponse(product, currentInventory, price, sku);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import pers.project.salesmanagement.dto.request.CreateAppUserRequest;
 import pers.project.salesmanagement.dto.request.UpdateAppUserRequest;
 import pers.project.salesmanagement.dto.response.AppUserResponse;
+import pers.project.salesmanagement.dto.response.RegisterResponse;
 import pers.project.salesmanagement.entity.AppUser;
 import pers.project.salesmanagement.entity.Role;
 import pers.project.salesmanagement.entity.Tenant;
@@ -16,7 +17,7 @@ import pers.project.salesmanagement.entity.status.UserStatus;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-28T17:04:48+0700",
+    date = "2026-06-28T17:15:49+0700",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
 )
 @Component
@@ -31,11 +32,38 @@ public class AppUserMapperImpl implements AppUserMapper {
         AppUser appUser = new AppUser();
 
         appUser.setEmail( request.email() );
-        appUser.setName( request.name() );
         appUser.setPassword( request.password() );
+        appUser.setName( request.name() );
         appUser.setPhone( request.phone() );
 
         return appUser;
+    }
+
+    @Override
+    public RegisterResponse toRegisterResponse(AppUser appUser) {
+        if ( appUser == null ) {
+            return null;
+        }
+
+        List<String> rolesName = null;
+        UUID id = null;
+        String email = null;
+        String name = null;
+        String phone = null;
+        UserStatus status = null;
+        LocalDateTime createdAt = null;
+
+        rolesName = roleListToStringList( appUser.getRoles() );
+        id = appUser.getId();
+        email = appUser.getEmail();
+        name = appUser.getName();
+        phone = appUser.getPhone();
+        status = appUser.getStatus();
+        createdAt = appUser.getCreatedAt();
+
+        RegisterResponse registerResponse = new RegisterResponse( id, email, name, phone, status, createdAt, rolesName );
+
+        return registerResponse;
     }
 
     @Override
@@ -89,20 +117,12 @@ public class AppUserMapperImpl implements AppUserMapper {
 
         AppUser appUser = new AppUser();
 
-        appUser.setEmail( request.email() );
         appUser.setId( request.id() );
+        appUser.setEmail( request.email() );
         appUser.setName( request.name() );
         appUser.setPhone( request.phone() );
 
         return appUser;
-    }
-
-    private String appUserTenantName(AppUser appUser) {
-        Tenant tenant = appUser.getTenant();
-        if ( tenant == null ) {
-            return null;
-        }
-        return tenant.getName();
     }
 
     protected List<String> roleListToStringList(List<Role> list) {
@@ -116,5 +136,13 @@ public class AppUserMapperImpl implements AppUserMapper {
         }
 
         return list1;
+    }
+
+    private String appUserTenantName(AppUser appUser) {
+        Tenant tenant = appUser.getTenant();
+        if ( tenant == null ) {
+            return null;
+        }
+        return tenant.getName();
     }
 }

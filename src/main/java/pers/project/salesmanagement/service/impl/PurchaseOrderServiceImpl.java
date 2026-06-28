@@ -6,10 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pers.project.salesmanagement.dto.request.CreatePurchaseOrderRequest;
-import pers.project.salesmanagement.dto.response.PurchaseOrderItemResponse;
 import pers.project.salesmanagement.dto.response.PurchaseOrderResponse;
 import pers.project.salesmanagement.entity.*;
 import pers.project.salesmanagement.entity.status.PurchaseStatus;
+import pers.project.salesmanagement.mapper.PurchaseOrderMapper;
 import pers.project.salesmanagement.repository.*;
 import pers.project.salesmanagement.security.TenantSecurityUtil;
 import pers.project.salesmanagement.service.PurchaseOrderService;
@@ -28,6 +28,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     private final SupplierRepository supplierRepository;
     private final ProductVariantRepository productVariantRepository;
     private final TenantRepository tenantRepository;
+    private final PurchaseOrderMapper purchaseOrderMapper;
 
     @Override
     public PurchaseOrderResponse createPurchaseOrder(CreatePurchaseOrderRequest request) {
@@ -77,7 +78,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         PurchaseOrder savedPo = purchaseOrderRepository.save(po);
         purchaseOrderItemRepository.saveAll(items);
 
-        return mapToResponse(savedPo);
+        return purchaseOrderMapper.toResponse(savedPo);
     }
 
     @Override
@@ -88,7 +89,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         }
 
         return purchaseOrderRepository.findByTenantId(tenantId, pageable)
-                .map(this::mapToResponse);
+                .map(purchaseOrderMapper::toResponse);
     }
 
     @Override
@@ -105,31 +106,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             throw new RuntimeException("Access denied to this purchase order");
         }
 
-        return mapToResponse(po);
-    }
-
-    private PurchaseOrderResponse mapToResponse(PurchaseOrder po) {
-        List<PurchaseOrderItemResponse> itemResponses = new ArrayList<>();
-        if (po.getPurchaseOrderItems() != null) {
-            for (PurchaseOrderItem item : po.getPurchaseOrderItems()) {
-                itemResponses.add(new PurchaseOrderItemResponse(
-                        item.getId(),
-                        item.getVariant().getId(),
-                        item.getVariant().getSku(),
-                        item.getQuantity(),
-                        item.getUnitCost()
-                ));
-            }
-        }
-
-        return new PurchaseOrderResponse(
-                po.getId(),
-                po.getPoNumber(),
-                po.getStatus().name(),
-                po.getAmount(),
-                po.getCreatedAt(),
-                po.getSupplier() != null ? po.getSupplier().getName() : null,
-                itemResponses
-        );
+        return purchaseOrderMapper.toResponse(po);
     }
 }

@@ -15,10 +15,10 @@ public interface ProductMapper {
     @Mapping(source = "category.name", target = "categoryName")
     ProductResponse toResponse(Product product);
 
-    @Mapping(source = "image.imageUrl", target = "imageUrl")
-    @Mapping(source = "category.name", target = "categoryName")
-    @Mapping(target = "currentInventory", ignore = true)
-    @Mapping(target = "price", ignore = true)
-    @Mapping(target = "sku", ignore = true)
-    ProductDetailResponse toDetailResponse(Product product);
+    @Mapping(source = "product.image.imageUrl", target = "imageUrl")
+    @Mapping(source = "product.category.name", target = "categoryName")
+    @Mapping(source = "inventory", target = "currentInventory")
+    @Mapping(source = "price", target = "price")
+    @Mapping(source = "sku", target = "sku")
+    ProductDetailResponse toDetailResponse(Product product, int inventory, double price, String sku);
 }

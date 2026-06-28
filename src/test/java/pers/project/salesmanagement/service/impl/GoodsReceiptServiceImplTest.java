@@ -17,6 +17,7 @@ import pers.project.salesmanagement.dto.request.CreateGoodsReceiptRequest;
 import pers.project.salesmanagement.dto.response.GoodsReceiptResponse;
 import pers.project.salesmanagement.entity.*;
 import pers.project.salesmanagement.entity.status.PurchaseStatus;
+import pers.project.salesmanagement.mapper.GoodsReceiptMapper;
 import pers.project.salesmanagement.repository.*;
 import pers.project.salesmanagement.security.TenantSecurityUtil;
 
@@ -48,6 +49,8 @@ class GoodsReceiptServiceImplTest {
     private InventoryTransactionRepository inventoryTransactionRepository;
     @Mock
     private TenantRepository tenantRepository;
+    @Mock
+    private GoodsReceiptMapper goodsReceiptMapper;
 
     @InjectMocks
     private GoodsReceiptServiceImpl goodsReceiptService;
@@ -94,14 +97,13 @@ class GoodsReceiptServiceImplTest {
 
             CreateGoodsReceiptItemRequest itemReq = new CreateGoodsReceiptItemRequest(variant.getId(), 10);
             CreateGoodsReceiptRequest request = new CreateGoodsReceiptRequest(
-                    purchaseOrder.getId(), warehouse.getId(), Collections.singletonList(itemReq)
-            );
+                    purchaseOrder.getId(), warehouse.getId(), Collections.singletonList(itemReq));
 
             when(tenantRepository.getReferenceById(tenantId)).thenReturn(tenant);
             when(purchaseOrderRepository.findById(purchaseOrder.getId())).thenReturn(Optional.of(purchaseOrder));
             when(warehouseRepository.findById(warehouse.getId())).thenReturn(Optional.of(warehouse));
             when(productVariantRepository.findById(variant.getId())).thenReturn(Optional.of(variant));
-            
+
             // Existing inventory found
             when(inventoryRepository.findByWarehouseIdAndVariantId(warehouse.getId(), variant.getId()))
                     .thenReturn(Optional.of(inventory));
@@ -120,6 +122,9 @@ class GoodsReceiptServiceImplTest {
             gr.setGoodsReceiptItems(Collections.singletonList(item));
 
             when(goodsReceiptRepository.save(any(GoodsReceipt.class))).thenReturn(gr);
+            when(goodsReceiptMapper.toResponse(any(GoodsReceipt.class))).thenReturn(new GoodsReceiptResponse(
+                    gr.getId(), gr.getReceiptNumber(), gr.getReceiptDate(), purchaseOrder.getId(),
+                    purchaseOrder.getPoNumber(), warehouse.getName(), Collections.emptyList()));
 
             GoodsReceiptResponse response = goodsReceiptService.createGoodsReceipt(request);
 

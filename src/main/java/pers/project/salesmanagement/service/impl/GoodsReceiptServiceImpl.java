@@ -6,11 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pers.project.salesmanagement.dto.request.CreateGoodsReceiptRequest;
-import pers.project.salesmanagement.dto.response.GoodsReceiptItemResponse;
 import pers.project.salesmanagement.dto.response.GoodsReceiptResponse;
 import pers.project.salesmanagement.entity.*;
 import pers.project.salesmanagement.entity.status.PurchaseStatus;
 import pers.project.salesmanagement.entity.status.TransactionType;
+import pers.project.salesmanagement.mapper.GoodsReceiptMapper;
 import pers.project.salesmanagement.repository.*;
 import pers.project.salesmanagement.security.TenantSecurityUtil;
 import pers.project.salesmanagement.service.GoodsReceiptService;
@@ -33,6 +33,7 @@ public class GoodsReceiptServiceImpl implements GoodsReceiptService {
     private final InventoryRepository inventoryRepository;
     private final InventoryTransactionRepository inventoryTransactionRepository;
     private final TenantRepository tenantRepository;
+    private final GoodsReceiptMapper goodsReceiptMapper;
 
     @Override
     public GoodsReceiptResponse createGoodsReceipt(CreateGoodsReceiptRequest request) {
@@ -113,7 +114,7 @@ public class GoodsReceiptServiceImpl implements GoodsReceiptService {
         GoodsReceipt savedGr = goodsReceiptRepository.save(gr);
         goodsReceiptItemRepository.saveAll(items);
 
-        return mapToResponse(savedGr);
+        return goodsReceiptMapper.toResponse(savedGr);
     }
 
     @Override
@@ -124,7 +125,7 @@ public class GoodsReceiptServiceImpl implements GoodsReceiptService {
         }
 
         return goodsReceiptRepository.findByTenantId(tenantId, pageable)
-                .map(this::mapToResponse);
+                .map(goodsReceiptMapper::toResponse);
     }
 
     @Override
@@ -141,28 +142,6 @@ public class GoodsReceiptServiceImpl implements GoodsReceiptService {
             throw new RuntimeException("Access denied to this goods receipt");
         }
 
-        return mapToResponse(gr);
-    }
-
-    private GoodsReceiptResponse mapToResponse(GoodsReceipt gr) {
-        List<GoodsReceiptItemResponse> itemResponses = new ArrayList<>();
-        if (gr.getGoodsReceiptItems() != null) {
-            for (GoodsReceiptItem item : gr.getGoodsReceiptItems()) {
-                itemResponses.add(new GoodsReceiptItemResponse(
-                        item.getId(),
-                        item.getVariant().getId(),
-                        item.getVariant().getSku(),
-                        item.getQuantity()));
-            }
-        }
-
-        return new GoodsReceiptResponse(
-                gr.getId(),
-                gr.getReceiptNumber(),
-                gr.getReceiptDate(),
-                gr.getPurchaseOrder().getId(),
-                gr.getPurchaseOrder().getPoNumber(),
-                gr.getWarehouse().getName(),
-                itemResponses);
+        return goodsReceiptMapper.toResponse(gr);
     }
 }
