@@ -1,4 +1,5 @@
 pers\project\salesmanagement\service\impl\GoodsReceiptServiceImplTest.class
 pers\project\salesmanagement\SalesManagementApplicationTests.class
 pers\project\salesmanagement\service\impl\SalesOrderServiceImplTest.class
+pers\project\salesmanagement\service\impl\InventoryServiceImplTest.class
 pers\project\salesmanagement\service\impl\ProductServiceImplTest.class

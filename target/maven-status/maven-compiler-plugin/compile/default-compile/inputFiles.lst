@@ -3,6 +3,7 @@ D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\config\OpenAp
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\AppUserController.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\AuthController.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\GoodsReceiptController.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\InventoryController.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\ProductController.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\PurchaseOrderController.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\RoleController.java
@@ -30,6 +31,8 @@ D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\CategoryResponse.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\GoodsReceiptItemResponse.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\GoodsReceiptResponse.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\InventoryResponse.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\InventoryStatsResponse.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\ProductDetailResponse.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\ProductResponse.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\PurchaseOrderItemResponse.java
@@ -74,6 +77,7 @@ D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\AppUse
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\CategoryMapper.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\GoodsReceiptItemMapper.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\GoodsReceiptMapper.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\InventoryMapper.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\ProductMapper.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\PurchaseOrderItemMapper.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\mapper\PurchaseOrderMapper.java
@@ -119,12 +123,14 @@ D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\impl\
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\impl\AuthServiceImpl.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\impl\CategoryServiceImpl.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\impl\GoodsReceiptServiceImpl.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\impl\InventoryServiceImpl.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\impl\ProductServiceImpl.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\impl\PurchaseOrderServiceImpl.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\impl\RefreshTokenServiceImpl.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\impl\RoleServiceImpl.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\impl\SalesOrderServiceImpl.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\impl\TenantServiceImpl.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\InventoryService.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\ProductService.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\PurchaseOrderService.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\service\RefreshTokenService.java

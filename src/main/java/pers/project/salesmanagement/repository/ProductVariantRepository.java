@@ -9,4 +9,6 @@ import java.util.UUID;
 @Repository
 public interface ProductVariantRepository extends JpaRepository<ProductVariant, UUID> {
     boolean existsByTenantIdAndSku(UUID tenantId, String sku);
+
+    long countByTenantId(UUID tenantId);
 }

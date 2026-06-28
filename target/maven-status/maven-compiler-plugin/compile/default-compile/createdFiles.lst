@@ -4,7 +4,9 @@ pers\project\salesmanagement\dto\request\CreateAppUserRequest.class
 pers\project\salesmanagement\entity\ProductImage.class
 pers\project\salesmanagement\repository\SupplierRepository.class
 pers\project\salesmanagement\entity\Notification.class
+pers\project\salesmanagement\mapper\InventoryMapperImpl.class
 pers\project\salesmanagement\dto\response\RegisterResponse.class
+pers\project\salesmanagement\controller\InventoryController.class
 pers\project\salesmanagement\security\AppUserDetailsService.class
 pers\project\salesmanagement\dto\request\CreatePurchaseOrderItemRequest.class
 pers\project\salesmanagement\entity\PurchaseOrder.class
@@ -15,6 +17,7 @@ pers\project\salesmanagement\exception\GlobalExceptionHandler.class
 pers\project\salesmanagement\entity\status\PurchaseStatus.class
 pers\project\salesmanagement\mapper\GoodsReceiptMapperImpl.class
 pers\project\salesmanagement\security\SecurityConfig.class
+pers\project\salesmanagement\dto\response\InventoryStatsResponse.class
 pers\project\salesmanagement\repository\AppUserRepository.class
 pers\project\salesmanagement\repository\ProductRepository.class
 pers\project\salesmanagement\dto\response\RoleResponse.class
@@ -23,6 +26,8 @@ pers\project\salesmanagement\service\impl\PurchaseOrderServiceImpl.class
 pers\project\salesmanagement\entity\Product.class
 pers\project\salesmanagement\dto\response\TenantResponse.class
 pers\project\salesmanagement\service\impl\SalesOrderServiceImpl.class
+pers\project\salesmanagement\dto\response\InventoryResponse.class
+pers\project\salesmanagement\service\impl\InventoryServiceImpl.class
 pers\project\salesmanagement\entity\SalesOrderItem.class
 pers\project\salesmanagement\repository\SalesOrderRepository.class
 pers\project\salesmanagement\entity\ReturnOrderItem.class
@@ -118,8 +123,10 @@ pers\project\salesmanagement\service\SalesOrderService.class
 pers\project\salesmanagement\mapper\RoleMapperImpl.class
 pers\project\salesmanagement\mapper\SalesOrderItemMapper.class
 pers\project\salesmanagement\repository\ProductVariantRepository.class
+pers\project\salesmanagement\mapper\InventoryMapper.class
 pers\project\salesmanagement\mapper\GoodsReceiptItemMapper.class
 pers\project\salesmanagement\entity\Customer.class
+pers\project\salesmanagement\service\InventoryService.class
 pers\project\salesmanagement\controller\AuthController.class
 pers\project\salesmanagement\entity\InventoryTransaction.class
 pers\project\salesmanagement\mapper\GoodsReceiptItemMapperImpl.class

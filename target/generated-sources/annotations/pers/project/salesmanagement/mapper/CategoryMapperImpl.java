@@ -10,7 +10,7 @@ import pers.project.salesmanagement.entity.Tenant;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-28T17:13:26+0700",
+    date = "2026-06-28T17:35:48+0700",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component

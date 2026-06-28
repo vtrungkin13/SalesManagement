@@ -13,7 +13,7 @@ import pers.project.salesmanagement.entity.status.TenantStatus;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-28T17:13:27+0700",
+    date = "2026-06-28T17:35:47+0700",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
