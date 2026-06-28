@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "product")
+@Table(name = "product", indexes = {
+        @Index(name = "idx_product_tenant_category", columnList = "tenant_id, category_id"),
+        @Index(name = "idx_product_tenant_name", columnList = "tenant_id, name")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,6 +39,10 @@ public class Product {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
 
     @OneToMany(mappedBy = "product")
     private List<ProductVariant> variants;

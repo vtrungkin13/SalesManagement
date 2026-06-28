@@ -2,6 +2,7 @@ D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\config\CorsCo
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\config\OpenApiConfig.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\AppUserController.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\AuthController.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\ProductController.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\RoleController.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\SalesOrderController.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\TenantController.java
@@ -20,6 +21,7 @@ D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\request\U
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\AppUserResponse.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\AuthResponse.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\CategoryResponse.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\ProductDetailResponse.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\ProductResponse.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\RegisterResponse.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\dto\response\RoleResponse.java

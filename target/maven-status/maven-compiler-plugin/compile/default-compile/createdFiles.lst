@@ -33,6 +33,7 @@ pers\project\salesmanagement\dto\request\RegisterRequest.class
 pers\project\salesmanagement\repository\CategoryRepository.class
 pers\project\salesmanagement\config\CorsConfig$1.class
 pers\project\salesmanagement\exception\EmailAlreadyExistsException.class
+pers\project\salesmanagement\controller\ProductController.class
 pers\project\salesmanagement\controller\SalesOrderController.class
 pers\project\salesmanagement\entity\ProductVariant.class
 pers\project\salesmanagement\entity\Category.class
@@ -74,6 +75,7 @@ pers\project\salesmanagement\service\ProductService.class
 pers\project\salesmanagement\config\CorsConfig.class
 pers\project\salesmanagement\exception\InvalidRefreshTokenException.class
 pers\project\salesmanagement\service\impl\AuthServiceImpl.class
+pers\project\salesmanagement\dto\response\ProductDetailResponse.class
 pers\project\salesmanagement\repository\SalesOrderItemRepository.class
 pers\project\salesmanagement\service\RefreshTokenService.class
 pers\project\salesmanagement\controller\TenantController.class

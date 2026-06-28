@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "product_variant")
+@Table(name = "product_variant", uniqueConstraints = {
+        @UniqueConstraint(name = "uc_tenant_sku", columnNames = {"tenant_id", "sku"})
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,6 +38,10 @@ public class ProductVariant {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
 
     @OneToMany(mappedBy = "variant", fetch = FetchType.LAZY)
     private List<PurchaseOrderItem> purchaseOrderItems;

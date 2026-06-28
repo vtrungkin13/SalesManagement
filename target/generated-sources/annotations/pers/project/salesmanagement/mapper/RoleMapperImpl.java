@@ -8,13 +8,17 @@ import org.springframework.stereotype.Component;
 import pers.project.salesmanagement.dto.response.RoleResponse;
 import pers.project.salesmanagement.entity.Role;
 
-@Generated(value = "org.mapstruct.ap.MappingProcessor", date = "2026-06-25T16:24:46+0700", comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)")
+@Generated(
+    value = "org.mapstruct.ap.MappingProcessor",
+    date = "2026-06-28T15:58:28+0700",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
+)
 @Component
 public class RoleMapperImpl implements RoleMapper {
 
     @Override
     public RoleResponse toResponse(Role role) {
-        if (role == null) {
+        if ( role == null ) {
             return null;
         }
 
@@ -26,20 +30,20 @@ public class RoleMapperImpl implements RoleMapper {
         name = role.getName();
         description = role.getDescription();
 
-        RoleResponse roleResponse = new RoleResponse(id, name, description);
+        RoleResponse roleResponse = new RoleResponse( id, name, description );
 
         return roleResponse;
     }
 
     @Override
     public List<RoleResponse> toResponseList(List<Role> roles) {
-        if (roles == null) {
+        if ( roles == null ) {
             return null;
         }
 
-        List<RoleResponse> list = new ArrayList<RoleResponse>(roles.size());
-        for (Role role : roles) {
-            list.add(toResponse(role));
+        List<RoleResponse> list = new ArrayList<RoleResponse>( roles.size() );
+        for ( Role role : roles ) {
+            list.add( toResponse( role ) );
         }
 
         return list;

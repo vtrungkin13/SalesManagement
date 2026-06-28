@@ -16,8 +16,8 @@ import pers.project.salesmanagement.entity.status.UserStatus;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-25T21:36:10+0700",
-    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
+    date = "2026-06-28T15:58:28+0700",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
 public class AppUserMapperImpl implements AppUserMapper {
