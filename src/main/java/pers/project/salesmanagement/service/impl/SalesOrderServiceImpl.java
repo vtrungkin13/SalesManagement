@@ -33,6 +33,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     private final SalesOrderItemRepository salesOrderItemRepository;
     private final InventoryTransactionRepository inventoryTransactionRepository;
     private final SalesOrderMapper salesOrderMapper;
+    private final WarehouseRepository warehouseRepository;
 
     @Override
     public SalesOrderResponse createSalesOrder(CreateSalesOrderRequest request) {
@@ -56,6 +57,13 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         salesOrder.setTenant(tenant);
         salesOrder.setOrderNumber("SO-" + System.currentTimeMillis());
 
+        WareHouse warehouse = warehouseRepository.findById(request.warehouseId())
+                .orElseThrow(() -> new RuntimeException("Warehouse not found"));
+
+        if (warehouse.getTenant() == null || !warehouse.getTenant().getId().equals(tenantId)) {
+            throw new RuntimeException("Warehouse access denied");
+        }
+
         List<SalesOrderItem> salesOrderItems = new ArrayList<>();
         double subtotal = 0.0;
         double discount = 0.0;
@@ -68,33 +76,26 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 throw new RuntimeException("Product variant access denied");
             }
 
-            // 1. Verify Stock quantity
-            int stock = inventoryRepository.sumQuantityByVariantId(itemReq.variantId());
-            if (stock < itemReq.quantity()) {
-                throw new RuntimeException("Sản phẩm SKU " + variant.getSku() + " không đủ hàng trong kho. Trong kho: " + stock + ", Yêu cầu: " + itemReq.quantity());
+            // 1. Find Inventory for the specified warehouse and variant
+            Inventory inventory = inventoryRepository.findByWarehouseIdAndVariantId(request.warehouseId(), itemReq.variantId())
+                    .orElseThrow(() -> new RuntimeException("Sản phẩm SKU " + variant.getSku() + " không có thông tin tồn kho tại kho được chọn"));
+
+            // 2. Verify Stock quantity in the selected warehouse
+            if (inventory.getQuantity() < itemReq.quantity()) {
+                throw new RuntimeException("Sản phẩm SKU " + variant.getSku() + " không đủ hàng trong kho. Trong kho: " + inventory.getQuantity() + ", Yêu cầu: " + itemReq.quantity());
             }
 
-            // 2. Deduct Stock sequentially across warehouses
-            int remainingToDeduct = itemReq.quantity();
-            List<Inventory> inventories = inventoryRepository.findByVariantId(itemReq.variantId());
-            for (Inventory inventory : inventories) {
-                if (remainingToDeduct <= 0) break;
-                int currentQty = inventory.getQuantity();
-                if (currentQty > 0) {
-                    int deduct = Math.min(currentQty, remainingToDeduct);
-                    inventory.setQuantity(currentQty - deduct);
-                    remainingToDeduct -= deduct;
-                    inventoryRepository.save(inventory);
+            // 3. Deduct Stock from the single selected warehouse
+            inventory.setQuantity(inventory.getQuantity() - itemReq.quantity());
+            inventoryRepository.save(inventory);
 
-                    // Create Inventory Transaction
-                    InventoryTransaction tx = new InventoryTransaction();
-                    tx.setTransactionType(TransactionType.OUT);
-                    tx.setQuantity(deduct);
-                    tx.setInventory(inventory);
-                    tx.setReferenceId(salesOrderId);
-                    inventoryTransactionRepository.save(tx);
-                }
-            }
+            // Create Inventory Transaction
+            InventoryTransaction tx = new InventoryTransaction();
+            tx.setTransactionType(TransactionType.OUT);
+            tx.setQuantity(itemReq.quantity());
+            tx.setInventory(inventory);
+            tx.setReferenceId(salesOrderId);
+            inventoryTransactionRepository.save(tx);
 
             SalesOrderItem salesOrderItem = new SalesOrderItem();
             salesOrderItem.setVariant(variant);

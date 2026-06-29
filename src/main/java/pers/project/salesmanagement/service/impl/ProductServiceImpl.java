@@ -23,6 +23,8 @@ import pers.project.salesmanagement.repository.ProductVariantRepository;
 import pers.project.salesmanagement.repository.TenantRepository;
 import pers.project.salesmanagement.security.TenantSecurityUtil;
 import pers.project.salesmanagement.service.ProductService;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductVariantRepository productVariantRepository;
     private final InventoryRepository inventoryRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public ProductResponse createProduct(CreateProductRequest request) {
@@ -47,7 +50,10 @@ public class ProductServiceImpl implements ProductService {
         if (tenantId == null) {
             throw new RuntimeException("Tenant Context not found");
         }
+        return createProductInternal(request, tenantId);
+    }
 
+    private ProductResponse createProductInternal(CreateProductRequest request, UUID tenantId) {
         // 1. Verify Category exists and belongs to current Tenant
         Category category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -98,10 +104,50 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.save(product);
         productVariantRepository.save(variant);
 
+        evictCache();
+
         return productMapper.toResponse(savedProduct);
     }
 
     @Override
+    public List<ProductResponse> importProducts(List<CreateProductRequest> requests) {
+        UUID tenantId = TenantSecurityUtil.getCurrentTenantId();
+        if (tenantId == null) {
+            throw new RuntimeException("Tenant Context not found");
+        }
+
+        if (requests == null || requests.isEmpty()) {
+            return List.of();
+        }
+
+        // Check for duplicate SKUs inside the import request list
+        java.util.Set<String> batchSkus = new java.util.HashSet<>();
+        for (CreateProductRequest request : requests) {
+            if (request.sku() == null || request.sku().isBlank()) {
+                throw new RuntimeException("SKU cannot be blank");
+            }
+            if (!batchSkus.add(request.sku())) {
+                throw new RuntimeException("Duplicate SKU found in import list: " + request.sku());
+            }
+        }
+
+        List<ProductResponse> responses = new ArrayList<>();
+        for (CreateProductRequest request : requests) {
+            responses.add(createProductInternal(request, tenantId));
+        }
+        return responses;
+    }
+
+    @Override
+    @Cacheable(
+            value = "products",
+            key = "T(pers.project.salesmanagement.security.TenantSecurityUtil).getCurrentTenantId() + " +
+                  "':' + (#categoryId != null ? #categoryId : 'all') + " +
+                  "':' + (#name != null ? #name : 'all') + " +
+                  "':' + #pageable.pageNumber + " +
+                  "':' + #pageable.pageSize + " +
+                  "':' + #pageable.sort.toString()"
+    )
     public Page<ProductResponse> getProducts(UUID categoryId, String name, Pageable pageable) {
         UUID tenantId = TenantSecurityUtil.getCurrentTenantId();
         if (tenantId == null) {
@@ -109,6 +155,21 @@ public class ProductServiceImpl implements ProductService {
         }
         return productRepository.findByTenantAndFilters(tenantId, categoryId, name, pageable)
                 .map(productMapper::toResponse);
+    }
+
+    private void evictCache() {
+        UUID tenantId = TenantSecurityUtil.getCurrentTenantId();
+        if (tenantId != null) {
+            try {
+                String pattern = "products::" + tenantId + ":*";
+                java.util.Set<String> keys = redisTemplate.keys(pattern);
+                if (keys != null && !keys.isEmpty()) {
+                    redisTemplate.delete(keys);
+                }
+            } catch (Exception e) {
+                // Ignore cache errors
+            }
+        }
     }
 
     @Override

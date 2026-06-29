@@ -14,6 +14,7 @@ import pers.project.salesmanagement.dto.response.ProductDetailResponse;
 import pers.project.salesmanagement.dto.response.ProductResponse;
 import pers.project.salesmanagement.service.ProductService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,6 +27,12 @@ public class ProductController {
     @PostMapping("/create")
     public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody CreateProductRequest request) {
         ProductResponse response = productService.createProduct(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<List<ProductResponse>> importProducts(@RequestBody List<@Valid CreateProductRequest> requests) {
+        List<ProductResponse> response = productService.importProducts(requests);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

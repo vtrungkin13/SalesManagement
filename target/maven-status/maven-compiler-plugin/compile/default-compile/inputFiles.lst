@@ -1,5 +1,6 @@
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\config\CorsConfig.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\config\OpenApiConfig.java
+D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\config\RedisConfig.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\AppUserController.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\AuthController.java
 D:\Java\SalesManagement\src\main\java\pers\project\salesmanagement\controller\GoodsReceiptController.java

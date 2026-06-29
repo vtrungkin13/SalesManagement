@@ -28,8 +28,10 @@ import pers.project.salesmanagement.repository.ProductRepository;
 import pers.project.salesmanagement.repository.ProductVariantRepository;
 import pers.project.salesmanagement.repository.TenantRepository;
 import pers.project.salesmanagement.security.TenantSecurityUtil;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,6 +56,8 @@ class ProductServiceImplTest {
     private ProductVariantRepository productVariantRepository;
     @Mock
     private InventoryRepository inventoryRepository;
+    @Mock
+    private RedisTemplate<String, Object> redisTemplate;
 
     @InjectMocks
     private ProductServiceImpl productService;
@@ -181,6 +185,96 @@ class ProductServiceImplTest {
             assertEquals(150, detail.currentInventory());
             assertEquals(100.0, detail.price());
             assertEquals("SKU123", detail.sku());
+        }
+    }
+
+    @Test
+    void testImportProducts_Success() {
+        try (MockedStatic<TenantSecurityUtil> mockedSecurity = Mockito.mockStatic(TenantSecurityUtil.class)) {
+            mockedSecurity.when(TenantSecurityUtil::getCurrentTenantId).thenReturn(tenantId);
+
+            when(categoryRepository.findById(any())).thenReturn(Optional.of(category));
+            when(productVariantRepository.existsByTenantIdAndSku(eq(tenantId), anyString())).thenReturn(false);
+            when(tenantRepository.getReferenceById(tenantId)).thenReturn(tenant);
+
+            Product product = new Product();
+            product.setName("Test Product");
+            when(productMapper.toEntity(any())).thenReturn(product);
+            when(productRepository.save(any())).thenReturn(product);
+
+            ProductResponse expectedResponse = new ProductResponse(UUID.randomUUID(), "PROD1", "Test Product",
+                    "Description", "http://image.url", "CategoryName");
+            when(productMapper.toResponse(any())).thenReturn(expectedResponse);
+
+            CreateProductRequest req1 = new CreateProductRequest(
+                    "PROD1", "Test Product 1", "Desc", "url", category.getId(), "SKU1", 100.0, 50.0);
+            CreateProductRequest req2 = new CreateProductRequest(
+                    "PROD2", "Test Product 2", "Desc", "url", category.getId(), "SKU2", 200.0, 150.0);
+
+            List<ProductResponse> responses = productService.importProducts(List.of(req1, req2));
+
+            assertNotNull(responses);
+            assertEquals(2, responses.size());
+            verify(productRepository, times(2)).save(any(Product.class));
+            verify(productVariantRepository, times(2)).save(any(ProductVariant.class));
+        }
+    }
+
+    @Test
+    void testImportProducts_DuplicateSkuInBatch() {
+        try (MockedStatic<TenantSecurityUtil> mockedSecurity = Mockito.mockStatic(TenantSecurityUtil.class)) {
+            mockedSecurity.when(TenantSecurityUtil::getCurrentTenantId).thenReturn(tenantId);
+
+            CreateProductRequest req1 = new CreateProductRequest(
+                    "PROD1", "Test Product 1", "Desc", "url", category.getId(), "SKU_DUP", 100.0, 50.0);
+            CreateProductRequest req2 = new CreateProductRequest(
+                    "PROD2", "Test Product 2", "Desc", "url", category.getId(), "SKU_DUP", 200.0, 150.0);
+
+            Exception exception = assertThrows(RuntimeException.class,
+                    () -> productService.importProducts(List.of(req1, req2)));
+            assertTrue(exception.getMessage().contains("Duplicate SKU found in import list"));
+        }
+    }
+
+    @Test
+    void testImportProducts_DuplicateSkuInDb() {
+        try (MockedStatic<TenantSecurityUtil> mockedSecurity = Mockito.mockStatic(TenantSecurityUtil.class)) {
+            mockedSecurity.when(TenantSecurityUtil::getCurrentTenantId).thenReturn(tenantId);
+
+            when(categoryRepository.findById(any())).thenReturn(Optional.of(category));
+            when(productVariantRepository.existsByTenantIdAndSku(tenantId, "SKU1")).thenReturn(true);
+
+            CreateProductRequest req1 = new CreateProductRequest(
+                    "PROD1", "Test Product 1", "Desc", "url", category.getId(), "SKU1", 100.0, 50.0);
+
+            Exception exception = assertThrows(RuntimeException.class,
+                    () -> productService.importProducts(List.of(req1)));
+            assertEquals("SKU already exists for this tenant", exception.getMessage());
+        }
+    }
+
+    @Test
+    void testCreateProduct_EvictsCache() {
+        try (MockedStatic<TenantSecurityUtil> mockedSecurity = Mockito.mockStatic(TenantSecurityUtil.class)) {
+            mockedSecurity.when(TenantSecurityUtil::getCurrentTenantId).thenReturn(tenantId);
+
+            when(categoryRepository.findById(any())).thenReturn(Optional.of(category));
+            when(tenantRepository.getReferenceById(tenantId)).thenReturn(tenant);
+            when(productVariantRepository.existsByTenantIdAndSku(tenantId, "SKU123")).thenReturn(false);
+
+            Product product = new Product();
+            product.setName("Test Product");
+            when(productMapper.toEntity(any())).thenReturn(product);
+            when(productRepository.save(any())).thenReturn(product);
+            when(productMapper.toResponse(any())).thenReturn(new ProductResponse(UUID.randomUUID(), "PROD1", "Test Product", "Desc", "url", "Category"));
+
+            java.util.Set<String> keys = new java.util.HashSet<>(List.of("products::" + tenantId + ":key1"));
+            when(redisTemplate.keys("products::" + tenantId + ":*")).thenReturn(keys);
+
+            productService.createProduct(createProductRequest);
+
+            verify(redisTemplate).keys("products::" + tenantId + ":*");
+            verify(redisTemplate).delete(keys);
         }
     }
 }

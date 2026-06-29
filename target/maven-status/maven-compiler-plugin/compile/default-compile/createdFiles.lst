@@ -90,6 +90,7 @@ pers\project\salesmanagement\service\TenantService.class
 pers\project\salesmanagement\dto\response\AppUserResponse.class
 pers\project\salesmanagement\mapper\ProductMapper.class
 pers\project\salesmanagement\repository\RoleRepository.class
+pers\project\salesmanagement\config\RedisConfig.class
 pers\project\salesmanagement\service\impl\CategoryServiceImpl.class
 pers\project\salesmanagement\service\ProductService.class
 pers\project\salesmanagement\dto\request\CreateGoodsReceiptRequest.class

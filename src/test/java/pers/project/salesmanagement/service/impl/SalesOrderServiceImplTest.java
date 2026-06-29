@@ -48,6 +48,8 @@ class SalesOrderServiceImplTest {
     private InventoryTransactionRepository inventoryTransactionRepository;
     @Mock
     private SalesOrderMapper salesOrderMapper;
+    @Mock
+    private WarehouseRepository warehouseRepository;
 
     @InjectMocks
     private SalesOrderServiceImpl salesOrderService;
@@ -57,6 +59,8 @@ class SalesOrderServiceImplTest {
     private Customer customer;
     private ProductVariant variant;
     private Inventory inventory;
+
+    private WareHouse warehouse;
 
     @BeforeEach
     void setUp() {
@@ -69,6 +73,10 @@ class SalesOrderServiceImplTest {
         customer.setTenant(tenant);
         customer.setName("John Doe");
 
+        warehouse = new WareHouse();
+        warehouse.setId(UUID.randomUUID());
+        warehouse.setTenant(tenant);
+
         variant = new ProductVariant();
         variant.setId(UUID.randomUUID());
         variant.setSku("SKU123");
@@ -76,6 +84,7 @@ class SalesOrderServiceImplTest {
         variant.setTenant(tenant);
 
         inventory = new Inventory();
+        inventory.setWarehouse(warehouse);
         inventory.setVariant(variant);
         inventory.setQuantity(10);
     }
@@ -86,14 +95,15 @@ class SalesOrderServiceImplTest {
             mockedSecurity.when(TenantSecurityUtil::getCurrentTenantId).thenReturn(tenantId);
 
             CreateSalesOrderItemRequest itemReq = new CreateSalesOrderItemRequest(variant.getId(), 2, 10.0);
-            CreateSalesOrderRequest request = new CreateSalesOrderRequest(customer.getId(),
+            CreateSalesOrderRequest request = new CreateSalesOrderRequest(customer.getId(), warehouse.getId(),
                     Collections.singletonList(itemReq));
 
             when(tenantRepository.getReferenceById(tenantId)).thenReturn(tenant);
             when(customerRepository.findById(customer.getId())).thenReturn(Optional.of(customer));
+            when(warehouseRepository.findById(warehouse.getId())).thenReturn(Optional.of(warehouse));
             when(productVariantRepository.findById(variant.getId())).thenReturn(Optional.of(variant));
-            when(inventoryRepository.sumQuantityByVariantId(variant.getId())).thenReturn(10);
-            when(inventoryRepository.findByVariantId(variant.getId())).thenReturn(Collections.singletonList(inventory));
+            when(inventoryRepository.findByWarehouseIdAndVariantId(warehouse.getId(), variant.getId()))
+                    .thenReturn(Optional.of(inventory));
 
             SalesOrder mockOrder = new SalesOrder();
             mockOrder.setId(UUID.randomUUID());
@@ -132,17 +142,16 @@ class SalesOrderServiceImplTest {
         try (MockedStatic<TenantSecurityUtil> mockedSecurity = Mockito.mockStatic(TenantSecurityUtil.class)) {
             mockedSecurity.when(TenantSecurityUtil::getCurrentTenantId).thenReturn(tenantId);
 
-            CreateSalesOrderItemRequest itemReq = new CreateSalesOrderItemRequest(variant.getId(), 20, 10.0); // requests
-                                                                                                              // 20,
-                                                                                                              // stock
-                                                                                                              // is 10
-            CreateSalesOrderRequest request = new CreateSalesOrderRequest(customer.getId(),
+            CreateSalesOrderItemRequest itemReq = new CreateSalesOrderItemRequest(variant.getId(), 20, 10.0); // requests 20, stock is 10
+            CreateSalesOrderRequest request = new CreateSalesOrderRequest(customer.getId(), warehouse.getId(),
                     Collections.singletonList(itemReq));
 
             when(tenantRepository.getReferenceById(tenantId)).thenReturn(tenant);
             when(customerRepository.findById(customer.getId())).thenReturn(Optional.of(customer));
+            when(warehouseRepository.findById(warehouse.getId())).thenReturn(Optional.of(warehouse));
             when(productVariantRepository.findById(variant.getId())).thenReturn(Optional.of(variant));
-            when(inventoryRepository.sumQuantityByVariantId(variant.getId())).thenReturn(10);
+            when(inventoryRepository.findByWarehouseIdAndVariantId(warehouse.getId(), variant.getId()))
+                    .thenReturn(Optional.of(inventory));
 
             Exception exception = assertThrows(RuntimeException.class,
                     () -> salesOrderService.createSalesOrder(request));

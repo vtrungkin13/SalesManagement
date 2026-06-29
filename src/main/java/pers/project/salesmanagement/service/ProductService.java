@@ -6,10 +6,12 @@ import pers.project.salesmanagement.dto.request.CreateProductRequest;
 import pers.project.salesmanagement.dto.response.ProductDetailResponse;
 import pers.project.salesmanagement.dto.response.ProductResponse;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ProductService {
     ProductResponse createProduct(CreateProductRequest request);
     Page<ProductResponse> getProducts(UUID categoryId, String name, Pageable pageable);
     ProductDetailResponse getProductDetail(UUID id);
+    List<ProductResponse> importProducts(List<CreateProductRequest> requests);
 }

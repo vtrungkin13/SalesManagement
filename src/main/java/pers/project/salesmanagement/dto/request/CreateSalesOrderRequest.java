@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public record CreateSalesOrderRequest(
     UUID customerId,
+    UUID warehouseId,
     List<CreateSalesOrderItemRequest> salesOrderItemRequests
 ) {
 }
