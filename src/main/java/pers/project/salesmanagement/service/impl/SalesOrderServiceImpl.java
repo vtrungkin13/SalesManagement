@@ -77,17 +77,20 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             }
 
             // 1. Find Inventory for the specified warehouse and variant
-            Inventory inventory = inventoryRepository.findByWarehouseIdAndVariantId(request.warehouseId(), itemReq.variantId())
-                    .orElseThrow(() -> new RuntimeException("Sản phẩm SKU " + variant.getSku() + " không có thông tin tồn kho tại kho được chọn"));
+            Inventory inventory = inventoryRepository
+                    .findByWarehouseIdAndVariantId(request.warehouseId(), itemReq.variantId())
+                    .orElseThrow(() -> new RuntimeException(
+                            "Sản phẩm SKU " + variant.getSku() + " không có thông tin tồn kho tại kho được chọn"));
 
-            // 2. Verify Stock quantity in the selected warehouse
-            if (inventory.getQuantity() < itemReq.quantity()) {
-                throw new RuntimeException("Sản phẩm SKU " + variant.getSku() + " không đủ hàng trong kho. Trong kho: " + inventory.getQuantity() + ", Yêu cầu: " + itemReq.quantity());
+            // 2. Deduct Stock atomically from the single selected warehouse
+            int updatedRows = inventoryRepository.deductQuantity(inventory.getId(), itemReq.quantity());
+            if (updatedRows == 0) {
+                throw new RuntimeException("Sản phẩm SKU " + variant.getSku() + " không đủ hàng trong kho. Trong kho: "
+                        + inventory.getQuantity() + ", Yêu cầu: " + itemReq.quantity());
             }
 
-            // 3. Deduct Stock from the single selected warehouse
+            // Sync memory state
             inventory.setQuantity(inventory.getQuantity() - itemReq.quantity());
-            inventoryRepository.save(inventory);
 
             // Create Inventory Transaction
             InventoryTransaction tx = new InventoryTransaction();
@@ -201,13 +204,15 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
             int stock = inventoryRepository.sumQuantityByVariantId(itemReq.variantId());
             if (stock < itemReq.quantity()) {
-                throw new RuntimeException("Sản phẩm SKU " + variant.getSku() + " không đủ hàng trong kho. Trong kho: " + stock + ", Yêu cầu: " + itemReq.quantity());
+                throw new RuntimeException("Sản phẩm SKU " + variant.getSku() + " không đủ hàng trong kho. Trong kho: "
+                        + stock + ", Yêu cầu: " + itemReq.quantity());
             }
 
             int remainingToDeduct = itemReq.quantity();
             List<Inventory> inventories = inventoryRepository.findByVariantId(itemReq.variantId());
             for (Inventory inventory : inventories) {
-                if (remainingToDeduct <= 0) break;
+                if (remainingToDeduct <= 0)
+                    break;
                 int currentQty = inventory.getQuantity();
                 if (currentQty > 0) {
                     int deduct = Math.min(currentQty, remainingToDeduct);

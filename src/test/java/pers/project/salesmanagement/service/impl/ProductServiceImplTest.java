@@ -193,14 +193,14 @@ class ProductServiceImplTest {
         try (MockedStatic<TenantSecurityUtil> mockedSecurity = Mockito.mockStatic(TenantSecurityUtil.class)) {
             mockedSecurity.when(TenantSecurityUtil::getCurrentTenantId).thenReturn(tenantId);
 
-            when(categoryRepository.findById(any())).thenReturn(Optional.of(category));
-            when(productVariantRepository.existsByTenantIdAndSku(eq(tenantId), anyString())).thenReturn(false);
+            when(categoryRepository.findAllById(any())).thenReturn(List.of(category));
+            when(productVariantRepository.findExistingSkus(eq(tenantId), any())).thenReturn(List.of());
             when(tenantRepository.getReferenceById(tenantId)).thenReturn(tenant);
 
             Product product = new Product();
             product.setName("Test Product");
             when(productMapper.toEntity(any())).thenReturn(product);
-            when(productRepository.save(any())).thenReturn(product);
+            when(productRepository.saveAll(any())).thenReturn(List.of(product, product));
 
             ProductResponse expectedResponse = new ProductResponse(UUID.randomUUID(), "PROD1", "Test Product",
                     "Description", "http://image.url", "CategoryName");
@@ -215,8 +215,8 @@ class ProductServiceImplTest {
 
             assertNotNull(responses);
             assertEquals(2, responses.size());
-            verify(productRepository, times(2)).save(any(Product.class));
-            verify(productVariantRepository, times(2)).save(any(ProductVariant.class));
+            verify(productRepository).saveAll(any(List.class));
+            verify(productVariantRepository).saveAll(any(List.class));
         }
     }
 
@@ -241,8 +241,7 @@ class ProductServiceImplTest {
         try (MockedStatic<TenantSecurityUtil> mockedSecurity = Mockito.mockStatic(TenantSecurityUtil.class)) {
             mockedSecurity.when(TenantSecurityUtil::getCurrentTenantId).thenReturn(tenantId);
 
-            when(categoryRepository.findById(any())).thenReturn(Optional.of(category));
-            when(productVariantRepository.existsByTenantIdAndSku(tenantId, "SKU1")).thenReturn(true);
+            when(productVariantRepository.findExistingSkus(eq(tenantId), any())).thenReturn(List.of("SKU1"));
 
             CreateProductRequest req1 = new CreateProductRequest(
                     "PROD1", "Test Product 1", "Desc", "url", category.getId(), "SKU1", 100.0, 50.0);

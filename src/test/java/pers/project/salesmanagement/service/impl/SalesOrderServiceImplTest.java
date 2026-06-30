@@ -104,6 +104,7 @@ class SalesOrderServiceImplTest {
             when(productVariantRepository.findById(variant.getId())).thenReturn(Optional.of(variant));
             when(inventoryRepository.findByWarehouseIdAndVariantId(warehouse.getId(), variant.getId()))
                     .thenReturn(Optional.of(inventory));
+            when(inventoryRepository.deductQuantity(eq(inventory.getId()), eq(2))).thenReturn(1);
 
             SalesOrder mockOrder = new SalesOrder();
             mockOrder.setId(UUID.randomUUID());
@@ -133,7 +134,7 @@ class SalesOrderServiceImplTest {
             assertEquals("SO-12345", response.orderNumber());
             assertEquals(290.0, response.total());
             assertEquals(8, inventory.getQuantity()); // Stock deducted by 2
-            verify(inventoryRepository).save(inventory);
+            verify(inventoryRepository).deductQuantity(eq(inventory.getId()), eq(2));
         }
     }
 
@@ -152,6 +153,7 @@ class SalesOrderServiceImplTest {
             when(productVariantRepository.findById(variant.getId())).thenReturn(Optional.of(variant));
             when(inventoryRepository.findByWarehouseIdAndVariantId(warehouse.getId(), variant.getId()))
                     .thenReturn(Optional.of(inventory));
+            when(inventoryRepository.deductQuantity(eq(inventory.getId()), eq(20))).thenReturn(0);
 
             Exception exception = assertThrows(RuntimeException.class,
                     () -> salesOrderService.createSalesOrder(request));

@@ -120,8 +120,9 @@ public class ProductServiceImpl implements ProductService {
             return List.of();
         }
 
-        // Check for duplicate SKUs inside the import request list
+        // 1. Check for duplicate SKUs inside the import request list & validate basic constraints
         java.util.Set<String> batchSkus = new java.util.HashSet<>();
+        List<UUID> categoryIds = new ArrayList<>();
         for (CreateProductRequest request : requests) {
             if (request.sku() == null || request.sku().isBlank()) {
                 throw new RuntimeException("SKU cannot be blank");
@@ -129,12 +130,88 @@ public class ProductServiceImpl implements ProductService {
             if (!batchSkus.add(request.sku())) {
                 throw new RuntimeException("Duplicate SKU found in import list: " + request.sku());
             }
+            if (request.sellPrice() <= 0) {
+                throw new RuntimeException("Price must be greater than zero");
+            }
+            if (request.categoryId() == null) {
+                throw new RuntimeException("Category not found");
+            }
+            categoryIds.add(request.categoryId());
         }
 
-        List<ProductResponse> responses = new ArrayList<>();
-        for (CreateProductRequest request : requests) {
-            responses.add(createProductInternal(request, tenantId));
+        // 2. Batch check existing SKUs in DB
+        List<String> existingSkus = productVariantRepository.findExistingSkus(tenantId, new ArrayList<>(batchSkus));
+        if (!existingSkus.isEmpty()) {
+            throw new RuntimeException("SKU already exists for this tenant");
         }
+
+        // 3. Batch lookup categories and validate
+        List<Category> categories = categoryRepository.findAllById(categoryIds);
+        java.util.Map<UUID, Category> categoryMap = new java.util.HashMap<>();
+        for (Category category : categories) {
+            if (category.getTenant() == null || !category.getTenant().getId().equals(tenantId)) {
+                throw new RuntimeException("Category does not belong to the current tenant");
+            }
+            categoryMap.put(category.getId(), category);
+        }
+
+        // Ensure all categories exist
+        for (UUID catId : categoryIds) {
+            if (!categoryMap.containsKey(catId)) {
+                throw new RuntimeException("Category not found");
+            }
+        }
+
+        Tenant tenant = tenantRepository.getReferenceById(tenantId);
+        List<Product> productsToSave = new ArrayList<>();
+        List<ProductVariant> variantsToSave = new ArrayList<>();
+
+        // 4. Map requests to entities
+        for (CreateProductRequest request : requests) {
+            Category category = categoryMap.get(request.categoryId());
+            
+            // Map Product
+            Product product = productMapper.toEntity(request);
+            product.setCategory(category);
+            product.setTenant(tenant);
+            product.setStatus(ProductStatus.ACTIVE);
+
+            // Create Image
+            if (request.imageUrl() != null && !request.imageUrl().isBlank()) {
+                ProductImage productImage = new ProductImage();
+                productImage.setImageUrl(request.imageUrl());
+                productImage.setProduct(product);
+                product.setImage(productImage);
+            }
+
+            // Create Variant
+            ProductVariant variant = new ProductVariant();
+            variant.setSku(request.sku());
+            variant.setCostPrice(request.costPrice());
+            variant.setSellPrice(request.sellPrice());
+            variant.setProduct(product);
+            variant.setTenant(tenant);
+            variant.setStatus(ProductStatus.ACTIVE);
+
+            product.setVariants(List.of(variant));
+
+            productsToSave.add(product);
+            variantsToSave.add(variant);
+        }
+
+        // 5. Bulk Save
+        List<Product> savedProducts = productRepository.saveAll(productsToSave);
+        productVariantRepository.saveAll(variantsToSave);
+
+        // 6. Evict cache once
+        evictCache();
+
+        // 7. Map to responses
+        List<ProductResponse> responses = new ArrayList<>();
+        for (Product savedProduct : savedProducts) {
+            responses.add(productMapper.toResponse(savedProduct));
+        }
+
         return responses;
     }
 
