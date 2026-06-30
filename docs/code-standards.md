@@ -58,3 +58,7 @@ The system strictly adheres to a standard 4-layer Spring Boot structure:
 ### 6. Exception Handling
 - Do not catch exceptions and swallow them. Allow them to bubble up to the `GlobalExceptionHandler`.
 - Return standardized JSON response payloads for API errors with clear HTTP status codes.
+
+### 7. Performance & Concurrency Optimization
+- **Bulk Operations**: When importing or creating multiple entities (e.g., product imports), do not perform queries or saves inside a loop. Retrieve dependencies in batch (using IN clauses) and use Spring Data's `saveAll()` to minimize database roundtrips.
+- **Atomic Database Updates**: To prevent race conditions and lost updates in concurrent environments (such as inventory/stock changes), execute updates atomically in the database using `@Modifying` update queries (e.g., `SET quantity = quantity - :amount WHERE id = :id AND quantity >= :amount`) rather than reading to memory, updating, and saving back.

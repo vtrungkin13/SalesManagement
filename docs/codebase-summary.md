@@ -32,5 +32,7 @@ This document provides a technical walkthrough of the codebase, detailing direct
 
 ### 💼 Key Business Services
 - [AuthServiceImpl.java](file:///d:/Java/SalesManagement/src/main/java/pers/project/salesmanagement/service/impl/AuthServiceImpl.java): Orchestrates user registration, authentication, rate limits checking, and refresh token issuance.
-- [SalesOrderServiceImpl.java](file:///d:/Java/SalesManagement/src/main/java/pers/project/salesmanagement/service/impl/SalesOrderServiceImpl.java): Process logic for sales orders, resolving variant pricing, creating order items, and persisting changes.
+- [SalesOrderServiceImpl.java](file:///d:/Java/SalesManagement/src/main/java/pers/project/salesmanagement/service/impl/SalesOrderServiceImpl.java): Process logic for sales orders, resolving variant pricing, creating order items, and persisting changes atomically.
+- [ProductServiceImpl.java](file:///d:/Java/SalesManagement/src/main/java/pers/project/salesmanagement/service/impl/ProductServiceImpl.java): Handles creation and bulk imports of products using batch lookups and bulk saves to minimize DB roundtrips.
 - [TenantServiceImpl.java](file:///d:/Java/SalesManagement/src/main/java/pers/project/salesmanagement/service/impl/TenantServiceImpl.java): Management of tenants (registration, listing).
+- [InventoryRepository.java](file:///d:/Java/SalesManagement/src/main/java/pers/project/salesmanagement/repository/InventoryRepository.java): Implements concurrent-safe atomic update methods (`deductQuantity`) to manage stock correctly.

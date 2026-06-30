@@ -10,6 +10,7 @@ A premium, secure, and scalable multi-tenant SaaS application built with **Sprin
 - **Sales & Order Management**: Comprehensive order creation, tracking, customer loyalty points, and discounts.
 - **Inventory & Warehouse**: Complete tracking of products, variants, stock movements, and warehouse management.
 - **Purchase & Returns**: Lifecycle management for Goods Receipts, Purchase Orders, and Return Orders.
+- **Performance & Concurrency**: Bulk data import optimization using batch lookups and saves, and atomic database updates to prevent race conditions during inventory changes.
 
 ---
 
@@ -28,17 +29,17 @@ A premium, secure, and scalable multi-tenant SaaS application built with **Sprin
 ## 📂 Project Directory Structure
 
 ```
-pers.project.salesmanagement
-├── controller       # REST Controllers (Auth, Users, Orders, Tenants, Roles)
-├── dto              # Data Transfer Objects (Requests & Responses)
-├── entity           # JPA Entities (Tenant, AppUser, Product, SalesOrder, etc.)
-│   └── status       # Entity Enums (ProductStatus, UserStatus, etc.)
+src/main/java/pers/project/salesmanagement
+├── controller       # REST Controllers (Auth, Users, Orders, Tenants, Roles, Products)
+├── dto              # Data Transfer Objects (Requests & Responses using Java Records)
+├── entity           # JPA Entities (Tenant, AppUser, Product, ProductVariant, Inventory, SalesOrder, etc.)
+│   └── status       # Entity Enums (ProductStatus, UserStatus, TransactionType, etc.)
 ├── exception        # Exception Definitions & Global Exception Handler
 ├── mapper           # MapStruct Mapper Interfaces
-├── repository       # Spring Data JPA Repositories
+├── repository       # Spring Data JPA Repositories (Product, Inventory, Customer, etc.)
 ├── security         # Security Configurations, JWT Filters, & Tenant Context
 └── service          # Business Logic Interfaces
-    └── impl         # Service Implementations
+    └── impl         # Service Implementations (Auth, SalesOrder, Product, etc.)
 ```
 
 ---
