@@ -1,6 +1,10 @@
 package pers.project.salesmanagement.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,24 +28,33 @@ public class PurchaseOrder {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "tenant_id")
+    @JoinColumn(name = "tenant_id", nullable = false)
     private Tenant tenant;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(255) default 'PENDING'")
+    @Column(nullable = false, columnDefinition = "varchar(50)")
+    @org.hibernate.annotations.ColumnDefault("'PENDING'")
     private PurchaseStatus status = PurchaseStatus.PENDING;
 
+    @Min(0)
+    @Column(nullable = false, columnDefinition = "float check (amount >= 0)")
     private double amount;
 
+    @NotBlank
+    @Size(max = 50)
+    @Column(name = "po_number", nullable = false, unique = true, columnDefinition = "varchar(50)")
     private String poNumber;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "supplier_id")
+    @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "purchaseOrder")

@@ -1,10 +1,14 @@
 package pers.project.salesmanagement.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import pers.project.salesmanagement.entity.status.TenantStatus;
 
@@ -23,16 +27,20 @@ public class Tenant {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotNull
-    @Column(unique = true, nullable = false)
+    @NotBlank
+    @Size(max = 50)
+    @Column(unique = true, nullable = false, columnDefinition = "varchar(50)")
     private String code;
 
-    @NotNull
-    @Column(nullable = false)
+    @NotBlank
+    @Size(max = 100)
+    @Column(nullable = false, columnDefinition = "nvarchar(100)")
     private String name;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(255) default 'ACTIVE'")
+    @Column(nullable = false, columnDefinition = "varchar(50)")
+    @ColumnDefault("'ACTIVE'")
     private TenantStatus status = TenantStatus.ACTIVE;
 
     @CreationTimestamp

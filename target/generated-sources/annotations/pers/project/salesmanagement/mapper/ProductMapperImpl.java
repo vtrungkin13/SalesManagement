@@ -12,7 +12,7 @@ import pers.project.salesmanagement.entity.ProductImage;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-06-29T21:08:25+0700",
+    date = "2026-07-01T13:32:27+0700",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
 )
 @Component

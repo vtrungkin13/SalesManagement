@@ -1,7 +1,9 @@
 package pers.project.salesmanagement.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,11 +22,13 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotNull
-    @Column(unique = true, nullable = false)
+    @NotBlank
+    @Size(max = 50)
+    @Column(unique = true, nullable = false, columnDefinition = "varchar(50)")
     private String name;
 
-    @Column(columnDefinition = "varchar(max)")
+    @Size(max = 255)
+    @Column(columnDefinition = "nvarchar(255)")
     private String description;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")

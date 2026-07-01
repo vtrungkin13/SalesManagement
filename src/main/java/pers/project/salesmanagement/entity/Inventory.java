@@ -1,6 +1,8 @@
 package pers.project.salesmanagement.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,14 +21,18 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Min(0)
+    @Column(nullable = false, columnDefinition = "int check (quantity >= 0)")
     private int quantity;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "warehouse_id")
+    @JoinColumn(name = "warehouse_id", nullable = false)
     private WareHouse warehouse;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "variant_id")
+    @JoinColumn(name = "variant_id", nullable = false)
     private ProductVariant variant;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "inventory")
