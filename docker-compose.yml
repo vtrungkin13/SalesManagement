@@ -20,9 +20,25 @@ services:
       timeout: 5s
       retries: 10
 
+  db-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest
 
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+    volumes:
+      - ./init-db.sh:/init-db.sh
+
+    entrypoint:
+      - /bin/bash
+      - /init-db.sh
 
   app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
     image: sales-management
     container_name: sales-app
 
@@ -30,8 +46,8 @@ services:
       - "8080:8080"
 
     depends_on:
-      sqlserver:
-        condition: service_healthy
+      db-init:
+        condition: service_completed_successfully
 
 
 volumes:
