@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pers.project.salesmanagement.dto.request.CreatePurchaseOrderRequest;
 import pers.project.salesmanagement.dto.response.PurchaseOrderResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 import pers.project.salesmanagement.service.PurchaseOrderService;
 
 import java.util.UUID;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/purchase-order")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('USER')")
 public class PurchaseOrderController {
 
     private final PurchaseOrderService purchaseOrderService;

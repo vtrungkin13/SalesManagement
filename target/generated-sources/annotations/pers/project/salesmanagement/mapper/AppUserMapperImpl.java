@@ -17,7 +17,7 @@ import pers.project.salesmanagement.entity.status.UserStatus;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-01T14:03:01+0700",
+    date = "2026-07-02T19:01:43+0700",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component

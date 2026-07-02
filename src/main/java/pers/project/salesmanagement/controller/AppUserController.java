@@ -14,7 +14,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/app-user")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
 public class AppUserController {
     private final AppUserService appUserService;
 
@@ -26,11 +25,13 @@ public class AppUserController {
     }
 
     @PutMapping("/activate/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AppUserResponse> activateUser(@PathVariable UUID id) {
         return new ResponseEntity<>(appUserService.activateUser(id), HttpStatus.OK);
     }
 
     @PutMapping("/deactivate/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AppUserResponse> deactivateUser(@PathVariable UUID id) {
         return new ResponseEntity<>(appUserService.deactivateUser(id), HttpStatus.OK);
     }

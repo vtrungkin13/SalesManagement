@@ -40,6 +40,7 @@ pers\project\salesmanagement\repository\ProductImageRepository.class
 pers\project\salesmanagement\dto\response\AuthResponse.class
 pers\project\salesmanagement\entity\Inventory.class
 pers\project\salesmanagement\security\JwtAuthenticationFilter.class
+pers\project\salesmanagement\config\DataInitializer.class
 pers\project\salesmanagement\entity\AppUser.class
 pers\project\salesmanagement\entity\PurchaseOrderItem.class
 pers\project\salesmanagement\dto\request\RegisterRequest.class

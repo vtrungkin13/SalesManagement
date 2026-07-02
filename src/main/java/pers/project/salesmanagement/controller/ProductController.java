@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import pers.project.salesmanagement.dto.request.CreateProductRequest;
 import pers.project.salesmanagement.dto.response.ProductDetailResponse;
 import pers.project.salesmanagement.dto.response.ProductResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 import pers.project.salesmanagement.service.ProductService;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('USER')")
 public class ProductController {
 
     private final ProductService productService;

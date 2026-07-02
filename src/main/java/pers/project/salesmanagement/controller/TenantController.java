@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/tenant")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 @Tag(name = "Tenant", description = "Tenant API")
 public class TenantController {
     private final TenantService tenantService;

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import pers.project.salesmanagement.dto.request.CreateSalesOrderRequest;
 import pers.project.salesmanagement.dto.request.UpdateSalesOrderRequest;
 import pers.project.salesmanagement.dto.response.SalesOrderResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 import pers.project.salesmanagement.service.SalesOrderService;
 
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/sales-order")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('USER')")
 public class SalesOrderController {
 
     private final SalesOrderService salesOrderService;

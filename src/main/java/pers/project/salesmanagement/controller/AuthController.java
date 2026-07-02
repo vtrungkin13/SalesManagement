@@ -27,8 +27,7 @@ public class AuthController {
         String ip = httpServletRequest.getRemoteAddr();
         if (!loginRateLimiter.isAllowed(ip)) {
             throw new pers.project.salesmanagement.exception.RateLimitExceededException(
-                    "Bạn đã thử đăng nhập quá nhiều lần. Vui lòng thử lại sau 1 phút."
-            );
+                    "Bạn đã thử đăng nhập quá nhiều lần. Vui lòng thử lại sau 1 phút.");
         }
         return new ResponseEntity<>(authService.login(request), HttpStatus.OK);
     }
@@ -39,10 +38,12 @@ public class AuthController {
      * - Mật khẩu tối thiểu 8 ký tự (trả về 400 nếu vi phạm)
      * - Password hash KHÔNG BAO GIỜ được trả về trong response
      */
-    @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
-        return new ResponseEntity<>(authService.register(request), HttpStatus.CREATED);
-    }
+    // @PostMapping("/register")
+    // public ResponseEntity<RegisterResponse> register(@Valid @RequestBody
+    // RegisterRequest request) {
+    // return new ResponseEntity<>(authService.register(request),
+    // HttpStatus.CREATED);
+    // }
 
     /**
      * Làm mới access token bằng refresh token.

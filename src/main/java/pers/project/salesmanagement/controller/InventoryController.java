@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pers.project.salesmanagement.dto.response.InventoryResponse;
 import pers.project.salesmanagement.dto.response.InventoryStatsResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 import pers.project.salesmanagement.service.InventoryService;
 
 import java.util.UUID;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/inventory")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('USER')")
 public class InventoryController {
 
     private final InventoryService inventoryService;

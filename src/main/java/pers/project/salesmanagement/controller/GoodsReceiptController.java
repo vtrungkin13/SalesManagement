@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pers.project.salesmanagement.dto.request.CreateGoodsReceiptRequest;
 import pers.project.salesmanagement.dto.response.GoodsReceiptResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 import pers.project.salesmanagement.service.GoodsReceiptService;
 
 import java.util.UUID;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/goods-receipt")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('USER')")
 public class GoodsReceiptController {
 
     private final GoodsReceiptService goodsReceiptService;
