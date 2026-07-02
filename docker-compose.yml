@@ -6,7 +6,7 @@ services:
 
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "Trungkien132@"
+      MSSQL_SA_PASSWORD: "${SA_PASSWORD}"
 
     ports:
       - "1433:1433"
@@ -15,21 +15,22 @@ services:
       - sql-data:/var/opt/mssql
 
     healthcheck:
-      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "Trungkien132@" -C -Q "SELECT 1"
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${SA_PASSWORD}" -C -Q "SELECT 1"
       interval: 10s
       timeout: 5s
       retries: 10
 
   db-init:
     image: mcr.microsoft.com/mssql/server:2022-latest
-
+    environment:
+      - SA_PASSWORD=${SA_PASSWORD}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_NAME=${DB_NAME}
     depends_on:
       sqlserver:
         condition: service_healthy
-
     volumes:
       - ./init-db.sh:/init-db.sh
-
     entrypoint:
       - /bin/bash
       - /init-db.sh
@@ -38,13 +39,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-
     image: sales-management
     container_name: sales-app
-
     ports:
-      - "8080:8080"
-
+      - "${SPRING_PORT:-8080}:8080"
+    environment:
+      - DB_USERNAME=${DB_USERNAME:-sa}
+      - DB_PASSWORD=${SA_PASSWORD}
+      - DB_NAME=${DB_NAME:-sales}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     depends_on:
       db-init:
         condition: service_completed_successfully

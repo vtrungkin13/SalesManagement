@@ -6,9 +6,9 @@ sleep 20
 
 /opt/mssql-tools18/bin/sqlcmd \
 -S sqlserver \
--U sa \
--P "Trungkien132@" \
+-U "${DB_USERNAME:-sa}" \
+-P "${SA_PASSWORD}" \
 -C \
--Q "IF DB_ID('sales') IS NULL CREATE DATABASE sales"
+-Q "IF DB_ID('${DB_NAME:-sales}') IS NULL CREATE DATABASE ${DB_NAME:-sales}"
 
-echo "Database sales ready"
+echo "Database ${DB_NAME:-sales} ready"
