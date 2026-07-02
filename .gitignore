@@ -27,3 +27,8 @@ replay_pid*
 .agent/
 AGENTS.md
 
+# Environment variables
+.env
+
+# Maven target directory
+target/
