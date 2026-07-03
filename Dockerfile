@@ -1,8 +1,13 @@
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-COPY target/SalesManagement-0.0.1-SNAPSHOT.jar app.jar
+COPY target/*.jar app.jar
+
+RUN addgroup --system spring && \
+    adduser --system spring --ingroup spring
+
+USER spring
 
 EXPOSE 8080
 
