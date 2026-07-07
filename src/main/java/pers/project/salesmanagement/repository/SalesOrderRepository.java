@@ -11,4 +11,7 @@ import java.util.UUID;
 @Repository
 public interface SalesOrderRepository extends JpaRepository<SalesOrder, UUID> {
     Page<SalesOrder> findByTenantId(UUID tenantId, Pageable pageable);
+
+    boolean existsByCustomerId(UUID customerId);
 }
+

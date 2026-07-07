@@ -45,4 +45,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, UUID> {
         @org.springframework.data.jpa.repository.Modifying(clearAutomatically = true)
         @Query("UPDATE Inventory i SET i.quantity = i.quantity - :quantity WHERE i.id = :id AND i.quantity >= :quantity")
         int deductQuantity(@Param("id") java.util.UUID id, @Param("quantity") int quantity);
+
+        boolean existsByWarehouseId(UUID warehouseId);
 }
+

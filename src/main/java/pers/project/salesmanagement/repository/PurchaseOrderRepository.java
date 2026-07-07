@@ -11,4 +11,7 @@ import java.util.UUID;
 @Repository
 public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, UUID> {
     Page<PurchaseOrder> findByTenantId(UUID tenantId, Pageable pageable);
+
+    boolean existsBySupplierId(UUID supplierId);
 }
+

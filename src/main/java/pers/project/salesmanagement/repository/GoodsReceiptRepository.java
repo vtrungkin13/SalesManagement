@@ -11,4 +11,7 @@ import java.util.UUID;
 @Repository
 public interface GoodsReceiptRepository extends JpaRepository<GoodsReceipt, UUID> {
     Page<GoodsReceipt> findByTenantId(UUID tenantId, Pageable pageable);
+
+    boolean existsByWarehouseId(UUID warehouseId);
 }
+

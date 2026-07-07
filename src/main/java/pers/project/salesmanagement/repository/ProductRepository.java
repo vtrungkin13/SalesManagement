@@ -22,4 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             @Param("name") String name,
             Pageable pageable
     );
+
+    boolean existsByCategoryId(UUID categoryId);
 }
+
